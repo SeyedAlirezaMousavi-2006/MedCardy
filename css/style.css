@@ -524,7 +524,113 @@ body {
 .sheet-pill-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px;
+  gap: 12px;
+}
+
+/* کارت‌های انتخاب استایل دکمه در باتم‌شیت */
+.style-choice-card {
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(240, 249, 255, 0.7);
+  border: 2px solid rgba(224, 242, 254, 0.9);
+  cursor: pointer;
+  text-align: right;
+  transition: var(--transition-bounce);
+  position: relative;
+  overflow: hidden;
+}
+
+.style-choice-card:hover {
+  background: #ffffff;
+  border-color: var(--med-primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(2, 132, 199, 0.12);
+}
+
+.style-choice-card.active {
+  background: #ffffff;
+  border-color: var(--med-primary);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.18), inset 0 0 0 1px var(--med-primary);
+}
+
+.style-choice-card.active::before {
+  content: '✓ فعال';
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--med-primary);
+  background: #e0f2fe;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.choice-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e0f2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.choice-info {
+  flex: 1;
+}
+
+.choice-title {
+  display: block;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.choice-desc {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* پیش‌نمایش کوچک دکمه در هر سطر */
+.choice-preview {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.preview-glass {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.85) 0%, rgba(14, 165, 233, 0.85) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+  backdrop-filter: blur(4px);
+}
+
+.preview-3d {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 4px 0 #0369a1;
+  border: none;
+}
+
+.preview-outline {
+  background: transparent;
+  color: var(--med-primary);
+  border: 1.5px solid var(--med-primary);
 }
 
 /* ==========================================================================
@@ -1072,6 +1178,20 @@ body {
   height: 60px;
 }
 
+.ecg-svg-line path {
+  stroke-dasharray: 450;
+  stroke-dashoffset: 450;
+  animation: drawEcgLine 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+@keyframes drawEcgLine {
+  0% { stroke-dashoffset: 450; opacity: 0.3; }
+  35% { stroke-dashoffset: 0; opacity: 1; }
+  75% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: -450; opacity: 0.3; }
+}
+
 .ecg-caption {
   font-size: 0.75rem;
   color: #94a3b8;
@@ -1295,8 +1415,38 @@ body {
 
 /* نتایج و کارنامه موبایل */
 .results-mobile-card {
-  padding: 24px 18px;
+  padding: 28px 18px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.confetti {
+  position: absolute;
+  font-size: 1.4rem;
+  opacity: 0.85;
+  animation: floatConfetti 3s infinite ease-in-out alternate;
+}
+
+.c1 { top: 12px; right: 20px; animation-delay: 0.2s; }
+.c2 { top: 25px; left: 24px; animation-delay: 0.8s; font-size: 1.1rem; }
+.c3 { bottom: 40px; right: 18px; animation-delay: 0.5s; }
+.c4 { bottom: 50px; left: 20px; animation-delay: 1.1s; }
+.c5 { top: 45%; right: 12px; animation-delay: 1.5s; font-size: 1.2rem; }
+
+@keyframes floatConfetti {
+  0% { transform: translateY(0) rotate(0deg) scale(0.9); }
+  50% { transform: translateY(-12px) rotate(15deg) scale(1.15); }
+  100% { transform: translateY(8px) rotate(-15deg) scale(1); }
 }
 
 .success-ring-anim {

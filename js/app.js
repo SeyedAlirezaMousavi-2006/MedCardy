@@ -240,7 +240,7 @@ const app = {
     document.body.classList.add(btnStyle);
     appState.activeBtnStyle = btnStyle;
 
-    document.querySelectorAll('#btnStyleSwitcher .pill-btn').forEach(btn => {
+    document.querySelectorAll('#btnStyleSwitcher .style-choice-card').forEach(btn => {
       btn.classList.toggle('active', btn.getAttribute('data-btn-style') === btnStyle);
     });
 
@@ -429,8 +429,9 @@ const app = {
     }
 
     // سوییچر استایل دکمه‌ها در باتم‌شیت
-    document.querySelectorAll('#btnStyleSwitcher .pill-btn').forEach(btn => {
+    document.querySelectorAll('#btnStyleSwitcher .style-choice-card').forEach(btn => {
       btn.addEventListener('click', () => {
+        if (navigator.vibrate) navigator.vibrate(12);
         this.setBtnStyle(btn.getAttribute('data-btn-style'));
       });
     });

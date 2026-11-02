@@ -264,8 +264,15 @@
       <!-- ۵. صفحه کارنامه و نتیجه جلسه (Results) -->
       <section id="screen-results" class="screen-view">
         <div class="results-mobile-card glass-card">
-          <div class="success-ring-anim">🎉</div>
-          <h2>جلسه مرور امروز ثبت شد!</h2>
+          <div class="confetti-container">
+            <span class="confetti c1">🎉</span>
+            <span class="confetti c2">✨</span>
+            <span class="confetti c3">🔥</span>
+            <span class="confetti c4">💎</span>
+            <span class="confetti c5">⭐</span>
+          </div>
+          <div class="success-ring-anim">🫀</div>
+          <h2>جلسه مرور با موفقیت ثبت شد!</h2>
           <p class="results-subtext">نرخ پایداری حافظه درازمدت شما ارتقا یافت.</p>
 
           <div class="mobile-stat-tiles">
@@ -338,11 +345,40 @@
           <button class="close-sheet-btn" id="btnCloseSheet">&times;</button>
         </div>
         <div class="sheet-body">
-          <label class="sheet-label">نوع فیزیک دکمه‌ها:</label>
+          <label class="sheet-label">انتخاب سبک و فیزیک دکمه‌ها:</label>
           <div class="sheet-pill-grid" id="btnStyleSwitcher">
-            <button class="pill-btn active" data-btn-style="btn-style-glass">شیشه‌ای کریستال</button>
-            <button class="pill-btn" data-btn-style="btn-style-3d">سه‌بعدی گیمین (Duolingo)</button>
-            <button class="pill-btn" data-btn-style="btn-style-outline">خطی مینیمال</button>
+            <button class="style-choice-card active" data-btn-style="btn-style-glass">
+              <div class="choice-icon-wrap">
+                <span class="choice-icon">💎</span>
+              </div>
+              <div class="choice-info">
+                <span class="choice-title">شیشه‌ای کریستال (Crystal Glass)</span>
+                <span class="choice-desc">بلور نرم شیشه، هایلایت نورانی و انعکاس شفاف</span>
+              </div>
+              <div class="choice-preview preview-glass">نمونه دکمه</div>
+            </button>
+
+            <button class="style-choice-card" data-btn-style="btn-style-3d">
+              <div class="choice-icon-wrap">
+                <span class="choice-icon">🎮</span>
+              </div>
+              <div class="choice-info">
+                <span class="choice-title">سه‌بعدی گیمین (Duolingo 3D)</span>
+                <span class="choice-desc">عمق فیزیکی فشردنی، برجسته و ترشح دوپامین</span>
+              </div>
+              <div class="choice-preview preview-3d">نمونه دکمه</div>
+            </button>
+
+            <button class="style-choice-card" data-btn-style="btn-style-outline">
+              <div class="choice-icon-wrap">
+                <span class="choice-icon">📐</span>
+              </div>
+              <div class="choice-info">
+                <span class="choice-title">خطی مینیمال (Clinical Sleek)</span>
+                <span class="choice-desc">خطوط تخت و مهندسی‌شده، حداکثر سادگی بالینی</span>
+              </div>
+              <div class="choice-preview preview-outline">نمونه دکمه</div>
+            </button>
           </div>
         </div>
       </div>
