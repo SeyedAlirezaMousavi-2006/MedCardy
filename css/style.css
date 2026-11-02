@@ -141,48 +141,61 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .user-profile-pill {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .avatar-circle {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
   border: 1.5px solid #ffffff;
+  flex-shrink: 0;
 }
 
 .user-meta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .user-name {
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--med-primary-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-role {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header-badges {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .stat-pill {
@@ -1587,8 +1600,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
   border-bottom: 1px dashed rgba(2, 132, 199, 0.2);
 }
 
@@ -1596,40 +1610,81 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 .platform-logo {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
 }
 
 .platform-name {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--med-primary-dark);
+  white-space: nowrap;
 }
 
 .platform-tag {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   background: rgba(2, 132, 199, 0.08);
   color: var(--med-primary);
-  padding: 2px 7px;
+  padding: 1px 6px;
   border-radius: var(--radius-pill);
+  white-space: nowrap;
 }
 
 .module-switch-pill {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(186, 230, 253, 0.9);
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
   font-family: inherit;
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--med-primary-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: var(--transition-smooth);
+}
+
+@media (max-width: 440px) {
+  .platform-tag {
+    display: none;
+  }
+  .user-role {
+    display: none;
+  }
+  .app-header {
+    padding: 8px 10px 6px 10px;
+  }
+  .stat-pill {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+  .avatar-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.95rem;
+  }
+  .icon-action-btn {
+    width: 30px;
+    height: 30px;
+  }
+  .header-badges {
+    gap: 4px;
+  }
+  .module-switch-pill {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+  }
+}
   transition: var(--transition-smooth);
 }
 
