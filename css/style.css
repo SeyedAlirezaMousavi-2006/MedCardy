@@ -1,10 +1,10 @@
 /* ==========================================================================
-   MedCardy Design System - Light Medical Blue & Glassmorphic UI
-   بخش ۱: متغیرها، پایه‌ها، پس‌زمینه نوری شیشه‌ای و کنترل‌بار بالا
+   MedCardy Mobile-First Design System
+   بخش ۱: متغیرها، ریست، پس‌زمینه نوری، هدر موبایل و نوار ناوبری پایین
    ========================================================================== */
 
 :root {
-  /* پالت رنگی آبی پزشکی روشن و ملایم */
+  /* پالت رنگی آبی پزشکی روشن و ملایم (Light Medical Blue) */
   --bg-gradient-start: #f0f7ff;
   --bg-gradient-mid: #e1effe;
   --bg-gradient-end: #f4faff;
@@ -13,42 +13,43 @@
   --med-primary-light: #38bdf8;  /* آبی آسمانی روشن */
   --med-primary-dark: #0369a1;   /* آبی تیره عمیق */
   --med-cyan: #06b6d4;           /* فیروزه‌ای جراحی */
-  --med-cyan-soft: #cffafe;      /* فیروزه‌ای پاستلی */
+  --med-cyan-soft: #e0f2fe;      /* فیروزه‌ای پاستلی */
   
   --med-success: #10b981;        /* سبز موفقیت و یادآوری خوب */
   --med-warning: #f59e0b;        /* کهربایی هشدار و سخت */
   --med-danger: #ef4444;         /* قرمز دوباره و عقب‌افتاده */
   --med-purple: #8b5cf6;         /* بنفش FSRS */
 
-  --text-main: #0f172a;          /* تیره خوانا برای متون پزشکی */
+  --text-main: #0f172a;          /* تیره پرکنتراست برای متون پزشکی */
   --text-muted: #475569;         /* خاکستری خوانا */
-  --text-light: #94a3b8;         /* خاکستری کم‌رنگ برای راهنماها */
+  --text-light: #94a3b8;         /* خاکستری ملایم */
 
-  /* ویژگی‌های شیشه‌ای (Glassmorphism Properties) */
-  --glass-bg: rgba(255, 255, 255, 0.75);
+  /* خصوصیات شیشه‌ای موبایل (Mobile Glassmorphism) */
+  --glass-bg: rgba(255, 255, 255, 0.78);
   --glass-bg-subtle: rgba(255, 255, 255, 0.55);
   --glass-border: rgba(255, 255, 255, 0.85);
-  --glass-border-highlight: rgba(186, 230, 253, 0.9);
+  --glass-border-highlight: rgba(186, 230, 253, 0.95);
   --glass-blur: blur(16px);
-  --glass-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8);
-  --glass-shadow-hover: 0 16px 36px -6px rgba(2, 132, 199, 0.16), 0 0 0 1px rgba(56, 189, 248, 0.4);
+  --glass-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8);
+  --glass-shadow-hover: 0 12px 28px -4px rgba(2, 132, 199, 0.16);
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
   --radius-pill: 9999px;
 
-  --transition-smooth: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --bottom-bar-height: 72px;
 }
 
-/* ریست و پایه استایل */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -59,10 +60,11 @@ body {
   min-height: 100vh;
   direction: rtl;
   overflow-x: hidden;
-  line-height: 1.6;
+  line-height: 1.5;
+  padding-bottom: calc(var(--bottom-bar-height) + 20px);
 }
 
-/* پس‌زمینه نوری شیشه‌ای متحرک (Ambient Glow Orbs) */
+/* پس‌زمینه نوری شیشه‌ای (Ambient Glowing Orbs) */
 .ambient-background {
   position: fixed;
   top: 0;
@@ -77,139 +79,184 @@ body {
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.55;
+  filter: blur(60px);
+  opacity: 0.6;
   animation: floatOrb 18s ease-in-out infinite alternate;
 }
 
 .orb-1 {
-  width: 500px;
-  height: 500px;
+  width: 300px;
+  height: 300px;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0) 70%);
-  top: -100px;
-  right: -80px;
+  top: -60px;
+  right: -50px;
 }
 
 .orb-2 {
-  width: 600px;
-  height: 600px;
+  width: 350px;
+  height: 350px;
   background: radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(59, 130, 246, 0) 70%);
-  bottom: -150px;
-  left: -100px;
+  bottom: 0px;
+  left: -80px;
   animation-duration: 22s;
-  animation-direction: alternate-reverse;
 }
 
 .orb-3 {
-  width: 400px;
-  height: 400px;
+  width: 250px;
+  height: 250px;
   background: radial-gradient(circle, rgba(165, 243, 252, 0.35) 0%, rgba(6, 182, 212, 0) 70%);
-  top: 40%;
-  left: 30%;
-  animation-duration: 26s;
+  top: 35%;
+  left: 20%;
 }
 
 @keyframes floatOrb {
   0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, 30px) scale(1.08); }
-  100% { transform: translate(-30px, 50px) scale(0.95); }
+  50% { transform: translate(25px, 20px) scale(1.06); }
+  100% { transform: translate(-20px, 30px) scale(0.95); }
 }
 
-/* محفظه اصلی صفحات */
-.app-container {
+/* ساختار کلی برای موبایل (Mobile App Wrapper) */
+.app-wrapper {
   position: relative;
   z-index: 10;
-  max-width: 1260px;
+  width: 100%;
+  max-width: 600px; /* پیش‌فرض موبایل؛ بعدا با مدیا کوئری برای دسکتاپ عریض می‌شود */
   margin: 0 auto;
-  padding: 24px 20px 80px 20px;
 }
 
-/* نوار کنترل شیشه‌ای بالا (Variant Controller & Navigation) */
-.controller-bar {
+/* هدر شیشه‌ای بالای اپلیکیشن */
+.app-header {
   position: sticky;
-  top: 14px;
-  z-index: 100;
-  margin: 14px 20px 0 20px;
-  padding: 12px 20px;
-  border-radius: var(--radius-lg);
+  top: 0;
+  z-index: 90;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.06);
+  padding: 12px 16px 8px 16px;
+}
+
+.header-main-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  box-shadow: var(--glass-shadow);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  background: var(--glass-bg);
-  transition: var(--transition-smooth);
+  margin-bottom: 10px;
 }
 
-.brand-area {
+.user-profile-pill {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.brand-logo {
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  font-size: 1.25rem;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+  border: 1.5px solid #ffffff;
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
   font-weight: 800;
-  font-size: 1.35rem;
+  font-size: 0.95rem;
   color: var(--med-primary-dark);
 }
 
-.logo-icon {
-  font-size: 1.6rem;
-  filter: drop-shadow(0 2px 6px rgba(2, 132, 199, 0.3));
+.user-role {
+  font-size: 0.72rem;
+  color: var(--text-muted);
 }
 
-.brand-name span {
-  color: var(--med-primary-light);
-}
-
-.badge-tag {
-  background: var(--med-cyan-soft);
-  color: var(--med-primary-dark);
-  font-size: 0.74rem;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(14, 165, 233, 0.25);
-}
-
-.control-group {
+.header-badges {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.control-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.switcher-pills {
+.stat-pill {
   display: flex;
-  background: rgba(224, 242, 254, 0.6);
-  padding: 3px;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  gap: 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(224, 242, 254, 0.8);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.pill-btn {
-  background: transparent;
-  border: none;
+.streak-pill { color: #ea580c; background: #fff7ed; border-color: #fed7aa; }
+.gem-pill { color: #0284c7; background: #f0f9ff; border-color: #bae6fd; }
+
+.flame-anim {
+  display: inline-block;
+  animation: pulseFlame 1.5s infinite alternate;
+}
+
+@keyframes pulseFlame {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.2) rotate(4deg); }
+}
+
+.icon-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.2);
+  color: var(--med-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.icon-action-btn:hover {
+  background: var(--med-primary);
+  color: #fff;
+}
+
+/* نوار اسکرول افقی انتخاب چیدمان‌ها در موبایل (Variant Strip) */
+.variant-strip {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 2px 0 4px 0;
+}
+
+.variant-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.variant-pill-slider {
+  display: flex;
+  gap: 6px;
+  width: max-content;
+}
+
+.v-pill {
   font-family: inherit;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--text-muted);
   padding: 6px 12px;
   border-radius: var(--radius-pill);
+  background: rgba(224, 242, 254, 0.65);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -218,78 +265,125 @@ body {
   white-space: nowrap;
 }
 
-.pill-btn svg {
+.v-pill svg {
   width: 14px;
   height: 14px;
 }
 
-.pill-btn:hover {
-  color: var(--med-primary-dark);
-}
-
-.pill-btn.active {
-  background: #ffffff;
-  color: var(--med-primary);
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
-  border: 1px solid rgba(186, 230, 253, 0.8);
-}
-
-/* نوار ناوبری اصلی */
-.main-nav {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.nav-item {
-  background: transparent;
-  border: 1px solid transparent;
-  font-family: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  padding: 7px 12px;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: var(--transition-smooth);
-  position: relative;
-}
-
-.nav-item svg {
-  width: 16px;
-  height: 16px;
-}
-
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.6);
-  color: var(--med-primary);
-}
-
-.nav-item.active {
-  background: rgba(2, 132, 199, 0.1);
-  color: var(--med-primary-dark);
-  border-color: rgba(56, 189, 248, 0.3);
-}
-
-.counter-badge {
-  background: var(--med-danger);
+.v-pill.active {
+  background: var(--med-primary);
   color: #ffffff;
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: var(--radius-pill);
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+  border-color: var(--med-primary-light);
 }
 
 /* ==========================================================================
-   بخش ۲: سیستم کارت‌های شیشه‌ای و ۳ سبک دکمه‌ها (Button Styles)
+   بخش ۲: نوار ناوبری فیکس پایین (Bottom Nav) و استایل دکمه‌ها و باتم‌شیت
    ========================================================================== */
 
-/* استایل عمومی کارت‌های شیشه‌ای (Glass Cards) */
-.glass-card, .glass-panel {
+/* نوار ناوبری شناور شیشه‌ای پایین موبایل */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-bar-height);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-top: 1px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 -4px 25px rgba(2, 132, 199, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 10px env(safe-area-inset-bottom, 0px) 10px;
+  z-index: 100;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.b-nav-item {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-light);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 10px;
+  transition: var(--transition-smooth);
+  position: relative;
+  flex: 1;
+}
+
+.b-nav-item svg {
+  width: 22px;
+  height: 22px;
+  transition: var(--transition-smooth);
+}
+
+.b-nav-item.active {
+  color: var(--med-primary);
+}
+
+.b-nav-item.active svg {
+  transform: translateY(-2px) scale(1.1);
+  stroke-width: 2.4;
+}
+
+/* دکمه وسطی ویژه ریکاوری */
+.special-recovery-btn .icon-bubble {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--med-primary) 0%, var(--med-primary-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: -16px;
+  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+  border: 3px solid #ffffff;
+  transition: var(--transition-bounce);
+}
+
+.special-recovery-btn.active .icon-bubble {
+  transform: scale(1.12);
+  box-shadow: 0 8px 22px rgba(2, 132, 199, 0.55);
+}
+
+.special-recovery-btn .icon-bubble svg {
+  width: 20px;
+  height: 20px;
+  color: #ffffff;
+}
+
+.recovery-bubble-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--med-danger);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid #ffffff;
+}
+
+/* محفظه اصلی صفحات موبایل */
+.content-canvas {
+  padding: 16px;
+}
+
+/* کارت عمومی شیشه‌ای */
+.glass-card {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -299,399 +393,364 @@ body {
   transition: var(--transition-smooth);
 }
 
-.glass-card:hover {
-  box-shadow: var(--glass-shadow-hover);
-  border-color: var(--glass-border-highlight);
+/* ابزارک روزشمار آزمون */
+.exam-countdown-card {
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  border-right: 4px solid var(--med-primary);
 }
 
-/* --------------------------------------------------------------------------
-   سیستم استایل دکمه‌ها بر اساس کلاس بدنه
-   -------------------------------------------------------------------------- */
+.countdown-badge {
+  display: inline-block;
+  background: var(--med-cyan-soft);
+  color: var(--med-primary-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 6px;
+}
 
-/* پایه دکمه‌های عمومی */
+.countdown-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countdown-text h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.countdown-text p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.countdown-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(56, 189, 248, 0.12) 100%);
+  border: 2px solid var(--med-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-circle .days-num {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--med-primary-dark);
+  line-height: 1;
+}
+
+.countdown-circle .days-label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+/* باتم‌شیت تنظیم استایل دکمه‌ها */
+.bottom-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeInBackdrop 0.25s ease;
+}
+
+.bottom-sheet-backdrop.active {
+  display: flex;
+}
+
+.bottom-sheet {
+  width: 100%;
+  max-width: 600px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  animation: slideUpSheet 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: var(--radius-pill);
+  margin: 0 auto 16px auto;
+}
+
+.sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.close-sheet-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.sheet-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.sheet-pill-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   بخش ۳: سیستم استایل دکمه‌های ۳گانه و چیدمان‌های موبایل (Quizlet & Duolingo)
+   ========================================================================== */
+
 .glass-btn {
   font-family: inherit;
   font-size: 0.92rem;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border-radius: var(--radius-md);
   cursor: pointer;
-  text-decoration: none;
-  transition: var(--transition-smooth);
   border: 1px solid transparent;
-  position: relative;
-  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.glass-btn.block-btn {
+  width: 100%;
 }
 
 .glass-btn.lg {
-  padding: 14px 28px;
-  font-size: 1.05rem;
-  border-radius: var(--radius-lg);
+  padding: 14px 24px;
+  font-size: 1rem;
 }
 
 .glass-btn.sm {
-  padding: 6px 14px;
+  padding: 8px 14px;
   font-size: 0.8rem;
-  border-radius: var(--radius-sm);
 }
 
-.glass-btn svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* ۱. استایل دکمه شیشه‌ای کریستالی (Crystal Glass) */
+/* ۱. استایل شیشه‌ای کریستال (Crystal Glass) */
 .btn-style-glass .glass-btn.primary {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.85) 0%, rgba(14, 165, 233, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.9) 0%, rgba(14, 165, 233, 0.9) 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.7);
 }
 
-.btn-style-glass .glass-btn.primary:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, rgba(3, 105, 161, 0.95) 0%, rgba(2, 132, 199, 0.95) 100%);
-  box-shadow: 0 12px 24px -4px rgba(2, 132, 199, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+.btn-style-glass .glass-btn.primary:active {
+  transform: scale(0.97);
 }
 
 .btn-style-glass .glass-btn.outline {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   color: var(--med-primary-dark);
-  border: 1px solid rgba(186, 230, 253, 0.8);
-  backdrop-filter: blur(8px);
-}
-
-.btn-style-glass .glass-btn.outline:hover {
-  background: rgba(224, 242, 254, 0.8);
-  transform: translateY(-2px);
-  border-color: var(--med-primary);
+  border: 1.5px solid rgba(186, 230, 253, 0.9);
 }
 
 .btn-style-glass .glass-btn.danger {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.85) 0%, rgba(248, 113, 113, 0.85) 100%);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 18px -4px rgba(239, 68, 68, 0.35);
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35);
 }
 
-.btn-style-glass .glass-btn.danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 22px -4px rgba(239, 68, 68, 0.45);
-}
-
-/* ۲. استایل دکمه سه‌بعدی و گیمین (3D Duolingo Tactile) */
+/* ۲. استایل سه‌بعدی گیمین (3D Tactile Duolingo) */
 .btn-style-3d .glass-btn {
-  border-radius: var(--radius-md);
   text-transform: uppercase;
-  font-weight: 700;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  font-weight: 800;
+  border: none;
 }
 
 .btn-style-3d .glass-btn.primary {
   background: #0284c7;
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 5px 0 #0369a1, 0 10px 18px rgba(2, 132, 199, 0.3);
-}
-
-.btn-style-3d .glass-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 0 #0369a1, 0 14px 22px rgba(2, 132, 199, 0.35);
+  color: #fff;
+  box-shadow: 0 4px 0 #0369a1, 0 8px 16px rgba(2, 132, 199, 0.25);
 }
 
 .btn-style-3d .glass-btn.primary:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #0369a1, 0 4px 10px rgba(2, 132, 199, 0.2);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #0369a1;
 }
 
 .btn-style-3d .glass-btn.outline {
   background: #ffffff;
   color: var(--med-primary-dark);
   border: 2px solid #bae6fd;
-  box-shadow: 0 4px 0 #93c5fd;
-}
-
-.btn-style-3d .glass-btn.outline:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 #93c5fd;
+  box-shadow: 0 3px 0 #93c5fd;
 }
 
 .btn-style-3d .glass-btn.outline:active {
-  transform: translateY(3px);
+  transform: translateY(2px);
   box-shadow: 0 1px 0 #93c5fd;
 }
 
-.btn-style-3d .glass-btn.danger {
-  background: #ef4444;
-  color: #fff;
-  border: none;
-  box-shadow: 0 5px 0 #b91c1c, 0 10px 16px rgba(239, 68, 68, 0.3);
-}
-
-.btn-style-3d .glass-btn.danger:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 #b91c1c;
-}
-
-/* ۳. استایل دکمه خطی مینیمال کلینیکال (Clinical Sleek Outline) */
+/* ۳. استایل خطی مینیمال (Clinical Outline) */
 .btn-style-outline .glass-btn {
   border-radius: var(--radius-sm);
-  background: transparent;
-  border: 1.5px solid var(--med-primary);
-  color: var(--med-primary);
 }
 
 .btn-style-outline .glass-btn.primary {
   background: var(--med-primary);
-  color: #ffffff;
-}
-
-.btn-style-outline .glass-btn.primary:hover {
-  background: var(--med-primary-dark);
+  color: #fff;
+  border: 1.5px solid var(--med-primary-dark);
 }
 
 .btn-style-outline .glass-btn.outline {
-  border-color: rgba(2, 132, 199, 0.4);
-  color: var(--med-primary-dark);
-}
-
-.btn-style-outline .glass-btn.outline:hover {
-  border-color: var(--med-primary);
-  background: rgba(2, 132, 199, 0.05);
-}
-
-.btn-style-outline .glass-btn.danger {
-  border-color: var(--med-danger);
   background: transparent;
-  color: var(--med-danger);
+  color: var(--med-primary);
+  border: 1.5px solid var(--med-primary);
 }
-
-.btn-style-outline .glass-btn.danger:hover {
-  background: var(--med-danger);
-  color: #ffffff;
-}
-
-/* کنترل نمایش صفحات */
-.screen-view {
-  display: none;
-  animation: fadeInView 0.35s ease-out forwards;
-}
-
-.screen-view.active {
-  display: block;
-}
-
-@keyframes fadeInView {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ==========================================================================
-   بخش ۳: استایل‌های اختصاصی ۴ چیدمان داشبورد (Dashboard Variants)
-   ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   واریانت ۱: چیدمان کویزلت مدرن (Quizlet Modern)
+   واریانت ۱ موبایل: کویزلت مدرن (Mobile Quizlet)
    -------------------------------------------------------------------------- */
-.layout-quizlet .dash-hero {
-  display: grid;
-  grid-template-columns: 1.8fr 1fr;
-  gap: 20px;
-  margin-bottom: 24px;
+.layout-quizlet .mobile-hero-quizlet {
+  padding: 20px;
+  margin-bottom: 16px;
 }
 
-.layout-quizlet .hero-main-card {
-  padding: 28px;
-  position: relative;
-  overflow: hidden;
-}
-
-.layout-quizlet .hero-title-row {
+.layout-quizlet .greeting-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.layout-quizlet .hero-title-row h1 {
-  font-size: 1.6rem;
-  color: var(--med-primary-dark);
-  font-weight: 800;
-}
-
-.layout-quizlet .study-prompt {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  margin-bottom: 24px;
-}
-
-.layout-quizlet .action-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.layout-quizlet .stats-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.stat-box-quizlet {
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.stat-box-quizlet .stat-info h4 {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.stat-box-quizlet .stat-info .num {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.stat-box-quizlet svg {
-  width: 32px;
-  height: 32px;
-  opacity: 0.8;
-}
-
-.layout-quizlet .decks-section h3 {
+.layout-quizlet .hero-title {
   font-size: 1.25rem;
-  color: var(--text-main);
-  margin-bottom: 16px;
-  font-weight: 700;
+  font-weight: 800;
+  color: var(--med-primary-dark);
 }
 
-.quizlet-deck-grid {
+.layout-quizlet .quick-stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0;
 }
 
-.quizlet-deck-card {
-  padding: 20px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px;
+.m-stat-box {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  text-align: center;
 }
 
-.quizlet-deck-card:hover {
-  transform: translateY(-4px);
+.m-stat-box .num {
+  font-size: 1.3rem;
+  font-weight: 900;
+  display: block;
 }
 
-.deck-meta-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  color: var(--text-light);
-  margin-bottom: 8px;
+.m-stat-box .label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
 }
 
-.deck-name {
+.layout-quizlet .mobile-decks-title {
   font-size: 1.05rem;
+  font-weight: 800;
+  margin: 20px 0 12px 0;
+  color: var(--text-main);
+}
+
+.mobile-deck-card {
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.mobile-deck-card:active {
+  transform: scale(0.98);
+}
+
+.m-deck-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.m-deck-title {
+  font-size: 0.98rem;
   font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
-.deck-tags {
-  font-size: 0.82rem;
+.m-deck-due-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--med-primary);
 }
 
-.deck-progress-bar {
-  width: 100%;
-  height: 6px;
-  background: rgba(2, 132, 199, 0.12);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-  margin-top: 14px;
-}
-
-.deck-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--med-primary-light), var(--med-primary));
-  border-radius: var(--radius-pill);
-}
-
 /* --------------------------------------------------------------------------
-   واریانت ۲: چیدمان دولینگو انگیزشی (Duolingo Pulse)
+   واریانت ۲ موبایل: دولینگو انگیزشی (Mobile Duolingo)
    -------------------------------------------------------------------------- */
-.layout-duolingo .gamify-hero {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(224, 242, 254, 0.75) 100%);
-  padding: 28px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  border: 2px solid rgba(56, 189, 248, 0.35);
+.layout-duolingo .duo-streak-hero {
+  padding: 22px;
+  margin-bottom: 16px;
+  text-align: center;
+  border: 2px solid rgba(56, 189, 248, 0.4);
 }
 
-.streak-badge-container {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.duo-streak-hero .flame-icon-big {
+  font-size: 3.2rem;
+  animation: pulseFlame 1.8s infinite;
+  display: inline-block;
+  margin-bottom: 6px;
 }
 
-.flame-icon-pulse {
-  font-size: 3rem;
-  animation: flameBounce 1.8s infinite ease-in-out;
-  filter: drop-shadow(0 4px 12px rgba(249, 115, 22, 0.4));
-}
-
-@keyframes flameBounce {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.15) rotate(5deg); }
-}
-
-.streak-text h2 {
-  font-size: 1.8rem;
+.duo-streak-hero h2 {
+  font-size: 1.4rem;
   font-weight: 900;
   color: #ea580c;
-  line-height: 1.2;
 }
 
-.streak-text p {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.daily-goal-container {
-  flex: 1;
-  max-width: 450px;
-}
-
-.goal-label-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-weight: 700;
-  font-size: 0.9rem;
+.duo-progress-container {
+  margin: 16px 0;
+  text-align: right;
 }
 
 .duo-progress-track {
   width: 100%;
-  height: 16px;
+  height: 14px;
   background: rgba(203, 213, 225, 0.5);
   border-radius: var(--radius-pill);
   overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin-top: 6px;
   padding: 2px;
 }
 
@@ -699,269 +758,213 @@ body {
   height: 100%;
   background: linear-gradient(90deg, #10b981, #34d399);
   border-radius: var(--radius-pill);
-  position: relative;
-  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: width 0.6s ease;
 }
 
-.duo-quest-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
+.duo-pulse-action {
+  margin: 18px 0;
 }
 
-.quest-card {
-  padding: 20px;
-  text-align: center;
+.duo-pulse-btn {
+  font-size: 1.1rem !important;
+  padding: 16px 24px !important;
+  border-radius: var(--radius-pill) !important;
+  animation: pulseShadow 2.5s infinite;
+}
+
+@keyframes pulseShadow {
+  0%, 100% { box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35); }
+  50% { box-shadow: 0 12px 28px rgba(2, 132, 199, 0.6); }
+}
+
+.duo-quests-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 10px;
 }
 
-.quest-icon {
-  font-size: 2.2rem;
+.duo-quest-item {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.quest-title {
+.quest-badge-icon {
+  font-size: 1.8rem;
+}
+
+.quest-details h4 {
+  font-size: 0.88rem;
   font-weight: 700;
-  font-size: 1.05rem;
 }
 
-.quest-desc {
-  font-size: 0.85rem;
+.quest-details p {
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
-.duo-big-action {
-  text-align: center;
-  margin: 30px 0;
-}
-
-.duo-play-btn {
-  font-size: 1.25rem !important;
-  padding: 18px 48px !important;
-  border-radius: var(--radius-pill) !important;
-  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.4) !important;
-  animation: pulseGlow 2.5s infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35); }
-  50% { box-shadow: 0 14px 35px rgba(2, 132, 199, 0.6); }
-}
+/* ==========================================================================
+   بخش ۴: واریانت‌های آنکی و شیفت، کارت چرخان ۳بعدی و دکمه‌های شست FSRS
+   ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   واریانت ۳: چیدمان آنکی کامند سنتر (Anki Command Center)
+   واریانت ۳ موبایل: آنکی FSRS
    -------------------------------------------------------------------------- */
-.layout-anki .anki-matrix-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-  margin-top: 14px;
+.layout-anki .anki-mobile-summary {
+  padding: 16px;
+  margin-bottom: 14px;
 }
 
-.layout-anki .anki-matrix-table th {
-  padding: 10px 16px;
-  font-size: 0.85rem;
+.layout-anki .anki-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.anki-fsrs-badge {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+  font-size: 0.75rem;
   font-weight: 700;
-  color: var(--text-muted);
-  text-align: right;
-  border-bottom: 2px solid rgba(2, 132, 199, 0.15);
-}
-
-.layout-anki .anki-row {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
-  transition: var(--transition-smooth);
-}
-
-.layout-anki .anki-row:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: scale(1.008);
-}
-
-.layout-anki .anki-row td {
-  padding: 14px 16px;
-  font-size: 0.9rem;
-}
-
-.layout-anki .anki-row td:first-child {
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-weight: 700;
-}
-
-.layout-anki .anki-row td:last-child {
-  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-}
-
-.anki-badge {
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
 }
 
-.anki-badge.new { background: #dbeafe; color: #1d4ed8; }
-.anki-badge.learning { background: #fef3c7; color: #b45309; }
-.anki-badge.due { background: #dcfce7; color: #15803d; }
-.anki-badge.overdue { background: #fee2e2; color: #b91c1c; }
-
-/* هیت‌مپ روزانه مشابه گیت‌هاب */
-.heatmap-container {
-  padding: 20px;
-  margin-top: 24px;
-}
-
-.heatmap-grid {
+.anki-mobile-card {
+  padding: 14px 16px;
+  margin-bottom: 10px;
   display: flex;
-  gap: 5px;
-  overflow-x: auto;
-  padding: 10px 0;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.heatmap-col {
+.anki-card-chips {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
-.heatmap-cell {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  background: rgba(224, 242, 254, 0.7);
-  transition: var(--transition-smooth);
+.anki-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
 }
 
-.heatmap-cell:hover {
-  transform: scale(1.3);
-}
-
-.heatmap-cell.level-1 { background: #bae6fd; }
-.heatmap-cell.level-2 { background: #7dd3fc; }
-.heatmap-cell.level-3 { background: #0284c7; }
-.heatmap-cell.level-4 { background: #0369a1; }
+.anki-chip.due { background: #dcfce7; color: #15803d; }
+.anki-chip.overdue { background: #fee2e2; color: #b91c1c; }
+.anki-chip.new { background: #dbeafe; color: #1d4ed8; }
 
 /* --------------------------------------------------------------------------
-   واریانت ۴: چیدمان شیفت و کشیک (Clinical Shift Mode)
+   واریانت ۴ موبایل: شیفت اورژانس و کشیک (Clinical Shift)
    -------------------------------------------------------------------------- */
-.layout-shift .shift-warning-card {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(254, 242, 242, 0.9) 100%);
-  border: 2px solid rgba(239, 68, 68, 0.3);
-  padding: 24px;
+.layout-shift .shift-mobile-alert {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(254, 242, 242, 0.95) 100%);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  padding: 18px;
+  margin-bottom: 16px;
   border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-bottom: 24px;
 }
 
-.layout-shift .shift-urgent-title {
+.shift-title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: #b91c1c;
-  font-size: 1.4rem;
   font-weight: 800;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
 }
 
-.layout-shift .thumb-friendly-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+.shift-title-box svg {
+  width: 20px;
+  height: 20px;
 }
 
-.thumb-action-card {
-  padding: 28px;
+.shift-desc-text {
+  font-size: 0.8rem;
+  color: #7f1d1d;
+  margin-bottom: 12px;
+}
+
+.shift-thumb-actions {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+}
+
+.shift-action-btn-card {
+  padding: 18px;
+  display: flex;
   align-items: center;
-  text-align: center;
   gap: 14px;
   cursor: pointer;
-  border: 2px solid rgba(2, 132, 199, 0.2);
 }
 
-.thumb-action-card:hover {
-  border-color: var(--med-primary);
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateY(-4px);
-}
-
-.thumb-action-card .icon-circle {
-  width: 64px;
-  height: 64px;
+.shift-action-btn-card .icon-box {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #e0f2fe;
   color: var(--med-primary);
-}
-
-.thumb-action-card .icon-circle svg {
-  width: 32px;
-  height: 32px;
+  flex-shrink: 0;
 }
 
 /* ==========================================================================
-   بخش ۴: صفحه مطالعه فلش‌کارت و چرخش سه‌بعدی
+   صفحه مطالعه فلش‌کارت در موبایل (Study Room Mobile)
    ========================================================================== */
-.study-container {
-  max-width: 860px;
-  margin: 0 auto;
-}
-
-.study-header {
-  padding: 18px 24px;
-  margin-bottom: 20px;
+.study-top-bar {
+  padding: 10px 14px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
-.deck-tag {
-  font-size: 0.8rem;
-  color: var(--med-primary);
-  font-weight: 600;
+.back-link-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--med-primary-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.deck-title {
-  font-size: 1.25rem;
+.current-deck-name {
+  font-size: 0.82rem;
   font-weight: 800;
   color: var(--text-main);
-  margin-top: 4px;
+  display: block;
 }
 
-.study-stats-pill {
+.study-counter-dots {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  font-size: 0.85rem;
+  gap: 8px;
+  font-size: 0.7rem;
   font-weight: 700;
 }
 
-.stat-divider {
-  color: #cbd5e1;
-}
+.dot-due { color: var(--med-danger); }
+.dot-today { color: var(--med-primary); }
 
-/* کارت چرخان ۳بعدی */
-.flashcard-wrapper {
+/* صحنه سه‌بعدی کارت */
+.mobile-card-stage {
   perspective: 1200px;
-  margin-bottom: 24px;
-  min-height: 360px;
+  min-height: 380px;
+  margin-bottom: 16px;
 }
 
 .flashcard {
   width: 100%;
-  min-height: 360px;
+  min-height: 380px;
   position: relative;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
@@ -974,11 +977,12 @@ body {
 
 .card-face {
   position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  padding: 32px;
+  padding: 22px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -995,469 +999,431 @@ body {
   background: rgba(255, 255, 255, 0.95);
 }
 
-.card-meta {
+.card-top-tags {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
-.badge-difficulty {
+.badge-high-yield {
   background: #fee2e2;
-  color: #dc2626;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 4px 12px;
+  color: #b91c1c;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
 }
 
-.card-hint-text {
-  font-size: 0.8rem;
-  color: var(--text-light);
+.badge-algo-tag {
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--med-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
 }
 
-.question-text {
-  font-size: 1.25rem;
+.badge-confirmed {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.badge-pearl {
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.scenario-text {
+  font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-main);
-  line-height: 1.8;
-  margin-bottom: 20px;
+  line-height: 1.7;
+  margin-bottom: 12px;
 }
 
-.card-image-placeholder {
+/* نمایشگر ECG */
+.ecg-visualizer-box {
   background: #0f172a;
-  color: #38bdf8;
   border-radius: var(--radius-md);
-  padding: 24px;
+  padding: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
   text-align: center;
-  border: 1px dashed rgba(56, 189, 248, 0.4);
 }
 
-.image-overlay {
+.ecg-badge-label {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #38bdf8;
+  direction: ltr;
+  margin-bottom: 4px;
+}
+
+.ecg-svg-line {
+  width: 100%;
+  height: 60px;
+}
+
+.ecg-caption {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: block;
+  margin-top: 4px;
+}
+
+.tap-hint-pill, .back-tap-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--med-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-family: monospace;
-  font-size: 0.9rem;
-  direction: ltr;
-}
-
-.card-action-hint {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.glass-btn-action {
-  font-family: inherit;
-  font-size: 0.95rem;
+  gap: 5px;
   font-weight: 600;
-  padding: 10px 24px;
+  padding: 6px;
+  background: rgba(2, 132, 199, 0.08);
   border-radius: var(--radius-pill);
-  background: rgba(2, 132, 199, 0.1);
-  color: var(--med-primary);
-  border: 1px solid rgba(2, 132, 199, 0.3);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: var(--transition-smooth);
+  margin-top: 10px;
 }
 
-.glass-btn-action:hover {
-  background: var(--med-primary);
-  color: #ffffff;
+.pearl-highlight-box {
+  background: rgba(16, 185, 129, 0.1);
+  border-right: 4px solid var(--med-success);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
 }
 
-.btn-flip-back {
-  background: transparent;
-  border: none;
-  font-family: inherit;
+.pearl-highlight-box h3 {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.pearl-highlight-box p {
   font-size: 0.85rem;
-  color: var(--med-primary);
-  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.danger-contraindication-box {
+  background: rgba(239, 68, 68, 0.08);
+  border-right: 4px solid var(--med-danger);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.danger-header {
   display: flex;
   align-items: center;
   gap: 6px;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.danger-contraindication-box p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* پنل دکمه‌های ارگونومیک شست (Thumb-Friendly FSRS) */
+.fsrs-thumb-container {
+  padding: 14px 16px;
+}
+
+.fsrs-section-title {
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
   font-weight: 600;
 }
 
-.clinical-box {
-  padding: 16px 20px;
-  border-radius: var(--radius-md);
-  margin-bottom: 14px;
-}
-
-.clinical-box.success-accent {
-  background: rgba(16, 185, 129, 0.1);
-  border-right: 4px solid var(--med-success);
-}
-
-.clinical-box.warning-accent {
-  background: rgba(245, 158, 11, 0.1);
-  border-right: 4px solid var(--med-warning);
-}
-
-.clinical-box h4 {
-  font-size: 1rem;
-  margin-bottom: 6px;
-}
-
-.clinical-box p {
-  font-size: 0.92rem;
-  color: var(--text-muted);
-}
-
-/* ==========================================================================
-   بخش ۵: دکمه‌های الگوریتم FSRS، حالت ریکاوری، نتایج و واکنش‌گرایی موبایل
-   ========================================================================== */
-
-/* پنل دکمه‌های FSRS */
-.fsrs-buttons-panel {
-  padding: 20px 24px;
-}
-
-.fsrs-guide {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-bottom: 14px;
-  text-align: center;
-}
-
-.fsrs-grid {
+.fsrs-thumb-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
-.fsrs-btn {
+.thumb-fsrs-btn {
   font-family: inherit;
   border: none;
-  padding: 12px 10px;
-  border-radius: var(--radius-md);
+  padding: 10px 4px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  transition: var(--transition-smooth);
+  gap: 2px;
+  transition: var(--transition-bounce);
 }
 
-.fsrs-btn .rate-time {
-  font-size: 0.8rem;
+.thumb-fsrs-btn:active {
+  transform: scale(0.92);
+}
+
+.thumb-fsrs-btn .f-time {
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
-.fsrs-btn .rate-name {
-  font-size: 0.95rem;
-  font-weight: 700;
+.thumb-fsrs-btn .f-label {
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
-.fsrs-btn .shortcut-key {
-  font-size: 0.7rem;
-  opacity: 0.75;
-  background: rgba(0, 0, 0, 0.08);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
+.thumb-fsrs-btn .f-key {
+  font-size: 0.62rem;
+  opacity: 0.7;
 }
 
-.fsrs-btn.btn-again {
-  background: rgba(239, 68, 68, 0.12);
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+.thumb-fsrs-btn.btn-again { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+.thumb-fsrs-btn.btn-hard { background: #fef3c7; color: #d97706; border: 1px solid #fcd34d; }
+.thumb-fsrs-btn.btn-good { background: #dcfce7; color: #059669; border: 1px solid #86efac; }
+.thumb-fsrs-btn.btn-easy { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; }
+
+/* ==========================================================================
+   بخش ۵: ریکاوری موبایل، نتایج، و مدیا کوئری تبلت و دسکتاپ (Responsive Expansion)
+   ========================================================================== */
+
+/* ریکاوری موبایل */
+.recovery-hero-card {
+  padding: 18px;
+  margin-bottom: 14px;
 }
 
-.fsrs-btn.btn-again:hover {
-  background: #dc2626;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
-}
-
-.fsrs-btn.btn-hard {
-  background: rgba(245, 158, 11, 0.12);
-  color: #d97706;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.fsrs-btn.btn-hard:hover {
-  background: #d97706;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(217, 119, 6, 0.3);
-}
-
-.fsrs-btn.btn-good {
-  background: rgba(16, 185, 129, 0.12);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.fsrs-btn.btn-good:hover {
-  background: #059669;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(5, 150, 105, 0.3);
-}
-
-.fsrs-btn.btn-easy {
-  background: rgba(2, 132, 199, 0.12);
-  color: #0284c7;
-  border: 1px solid rgba(2, 132, 199, 0.3);
-}
-
-.fsrs-btn.btn-easy:hover {
-  background: #0284c7;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(2, 132, 199, 0.3);
-}
-
-/* --------------------------------------------------------------------------
-   استایل صفحه Recovery Mode
-   -------------------------------------------------------------------------- */
-.recovery-container {
-  max-width: 860px;
-  margin: 0 auto;
-}
-
-.recovery-hero {
-  padding: 32px;
-  margin-bottom: 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.badge-fire {
-  display: inline-block;
+.fire-chip {
   background: #ffedd5;
   color: #c2410c;
-  font-weight: 700;
-  font-size: 0.8rem;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  margin-bottom: 12px;
-}
-
-.recovery-summary-chips {
-  display: flex;
-  gap: 14px;
-}
-
-.chip-item {
-  padding: 16px 20px;
-  border-radius: var(--radius-md);
-  text-align: center;
-  min-width: 120px;
-}
-
-.chip-item.red {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-}
-
-.chip-item.red .chip-num {
-  color: #b91c1c;
-  font-size: 1.8rem;
-  font-weight: 900;
-  display: block;
-}
-
-.chip-item.blue {
-  background: rgba(2, 132, 199, 0.1);
-  border: 1px solid rgba(2, 132, 199, 0.25);
-}
-
-.chip-item.blue .chip-num {
-  color: #0369a1;
-  font-size: 1.8rem;
-  font-weight: 900;
-  display: block;
-}
-
-.chip-label {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.recovery-calculator {
-  padding: 28px;
-}
-
-.calc-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.calc-header svg {
-  color: var(--med-primary);
-  width: 24px;
-  height: 24px;
-}
-
-.slider-value-display {
-  margin-right: auto;
-  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--med-primary-dark);
-  background: #e0f2fe;
-  padding: 4px 14px;
+  font-size: 0.72rem;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
-}
-
-.custom-slider {
-  width: 100%;
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background: #cbd5e1;
-  outline: none;
-  cursor: pointer;
-  accent-color: var(--med-primary);
-  margin-bottom: 10px;
-}
-
-.slider-ticks {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  color: var(--text-light);
-  margin-bottom: 24px;
-}
-
-.prescription-card {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  border-radius: var(--radius-md);
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.prescription-info h4 {
-  color: var(--med-primary-dark);
-  font-size: 1.1rem;
+  display: inline-block;
   margin-bottom: 6px;
 }
 
-.prescription-info p {
+.recovery-title-row h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.recovery-desc {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  font-size: 0.88rem;
 }
 
-/* --------------------------------------------------------------------------
-   استایل بخش نتایج و واکنش‌گرایی موبایل
-   -------------------------------------------------------------------------- */
-.results-container {
-  max-width: 680px;
-  margin: 0 auto;
-}
-
-.results-card {
-  padding: 36px;
-  text-align: center;
-}
-
-.celebration-badge {
-  display: inline-block;
-  background: #dcfce7;
-  color: #15803d;
-  font-weight: 700;
-  padding: 6px 16px;
-  border-radius: var(--radius-pill);
+.recovery-stepper-box {
+  padding: 18px;
   margin-bottom: 16px;
 }
 
-.results-card h2 {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: var(--text-main);
+.stepper-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-.results-card .subtitle {
+.stepper-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.stepper-label svg {
+  color: var(--med-primary);
+  width: 18px;
+  height: 18px;
+}
+
+.stepper-val-chip {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--med-primary-dark);
+  background: #e0f2fe;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.mobile-slider {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--med-primary);
+  margin-bottom: 6px;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.mobile-prescription {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 14px;
+  border-radius: var(--radius-md);
+}
+
+.mobile-prescription h4 {
+  font-size: 0.95rem;
+  color: var(--med-primary-dark);
+  margin-bottom: 4px;
+}
+
+.mobile-prescription p {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  margin-bottom: 28px;
+  margin-bottom: 12px;
 }
 
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 30px;
-}
-
-.metric-card {
-  padding: 16px 12px;
+/* نتایج و کارنامه موبایل */
+.results-mobile-card {
+  padding: 24px 18px;
   text-align: center;
 }
 
-.metric-value {
-  font-size: 1.8rem;
+.success-ring-anim {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: bounceSuccess 1.5s infinite;
+}
+
+@keyframes bounceSuccess {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.results-mobile-card h2 {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text-main);
+}
+
+.results-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.mobile-stat-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tile-stat {
+  padding: 14px;
+  text-align: center;
+}
+
+.tile-num {
+  font-size: 1.5rem;
   font-weight: 900;
   display: block;
 }
 
-.metric-title {
-  font-size: 0.78rem;
+.tile-lbl {
+  font-size: 0.72rem;
   color: var(--text-muted);
 }
 
-.results-actions {
+.mobile-action-buttons {
   display: flex;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* واکنش‌گرایی برای موبایل */
-@media (max-width: 860px) {
-  .controller-bar {
-    flex-direction: column;
-    align-items: stretch;
-    margin: 10px;
-    padding: 12px;
-  }
-  
-  .control-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .switcher-pills {
-    width: 100%;
-    overflow-x: auto;
-    justify-content: flex-start;
+/* کنترل نمایش صفحات */
+.screen-view {
+  display: none;
+  animation: fadeInMobile 0.22s ease-out;
+}
+
+.screen-view.active {
+  display: block;
+}
+
+@keyframes fadeInMobile {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --------------------------------------------------------------------------
+   مدیا کوئری: ارتقا برای تبلت و دسکتاپ (Progressive Desktop Enhancement)
+   -------------------------------------------------------------------------- */
+@media (min-width: 641px) {
+  .app-wrapper {
+    max-width: 780px;
   }
 
-  .main-nav {
-    overflow-x: auto;
-    padding-bottom: 4px;
+  .bottom-nav-bar {
+    max-width: 780px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
-  .layout-quizlet .dash-hero {
-    grid-template-columns: 1fr;
+  .quick-stats-row {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .duo-quest-grid {
-    grid-template-columns: 1fr;
+  .mobile-stat-tiles {
+    grid-template-columns: repeat(4, 1fr);
   }
 
-  .fsrs-grid {
+  .shift-thumb-actions {
     grid-template-columns: repeat(2, 1fr);
+    display: grid;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-wrapper {
+    max-width: 1180px;
   }
 
-  .metrics-grid {
+  .bottom-nav-bar {
+    max-width: 1180px;
+  }
+
+  .content-canvas {
+    padding: 24px 20px;
+  }
+
+  .layout-quizlet .quick-stats-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mobile-decks-grid-desktop {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 
-  .layout-shift .thumb-friendly-grid {
-    grid-template-columns: 1fr;
+  .mobile-action-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .mobile-action-buttons .block-btn {
+    width: auto;
+    min-width: 200px;
   }
 }
