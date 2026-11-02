@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedCardy | پلتفرم هوشمند فلش‌کارت پزشکی</title>
+  
+  <!-- فونت وزیرمتن استاندارد -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- استایل‌های پروژه -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- آیکون‌های Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="theme-glass-crystal btn-style-glass" data-layout="quizlet">
+
+  <!-- پس‌زمینه نوری شیشه‌ای (Ambient Glowing Orbs) -->
+  <div class="ambient-background">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- نوار کنترل بالایی برای تست انواع سبک‌ها و دکمه‌ها (Variant Controller) -->
+  <header class="controller-bar glass-panel">
+    <div class="brand-area">
+      <div class="brand-logo">
+        <span class="logo-icon">🫀</span>
+        <span class="brand-name">Med<span>Cardy</span></span>
+      </div>
+      <span class="badge-tag">پیش‌نمایش تعاملی UI/UX</span>
+    </div>
+
+    <!-- سوئیچر ۴ نوع چیدمان داشبورد -->
+    <div class="control-group">
+      <span class="control-label">چیدمان داشبورد:</span>
+      <div class="switcher-pills" id="layoutSwitcher">
+        <button class="pill-btn active" data-variant="quizlet">
+          <i data-lucide="layout-grid"></i>
+          <span>۱. کویزلت مدرن</span>
+        </button>
+        <button class="pill-btn" data-variant="duolingo">
+          <i data-lucide="flame"></i>
+          <span>۲. دولینگو انگیزشی</span>
+        </button>
+        <button class="pill-btn" data-variant="anki">
+          <i data-lucide="activity"></i>
+          <span>۳. آنکی کامند سنتر</span>
+        </button>
+        <button class="pill-btn" data-variant="shift">
+          <i data-lucide="shield-alert"></i>
+          <span>۴. شیفت و کشیک</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- سوئیچر استایل دکمه‌ها -->
+    <div class="control-group">
+      <span class="control-label">استایل دکمه‌ها:</span>
+      <div class="switcher-pills" id="btnStyleSwitcher">
+        <button class="pill-btn active" data-btn-style="btn-style-glass">شیشه‌ای کریستال</button>
+        <button class="pill-btn" data-btn-style="btn-style-3d">سه‌بعدی گیمین</button>
+        <button class="pill-btn" data-btn-style="btn-style-outline">خطی مینیمال</button>
+      </div>
+    </div>
+
+    <!-- نوار ناوبری صفحات اصلی -->
+    <nav class="main-nav">
+      <button class="nav-item active" data-screen="dashboard">
+        <i data-lucide="home"></i>
+        <span>داشبورد</span>
+      </button>
+      <button class="nav-item" data-screen="study">
+        <i data-lucide="layers"></i>
+        <span>مرور کارت</span>
+      </button>
+      <button class="nav-item" data-screen="recovery">
+        <i data-lucide="refresh-cw"></i>
+        <span>حالت ریکاوری</span>
+        <span class="counter-badge">۴۸</span>
+      </button>
+      <button class="nav-item" data-screen="courses">
+        <i data-lucide="book-open"></i>
+        <span>دروس</span>
+      </button>
+      <button class="nav-item" data-screen="results">
+        <i data-lucide="award"></i>
+        <span>کارنامه</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- محفظه اصلی صفحات (Dynamic Screen Container) -->
+  <main class="app-container">
+
+    <!-- صفحه ۱: داشبورد اصلی (شامل ۴ چیدمان متغیر) -->
+    <section id="screen-dashboard" class="screen-view active">
+      <div id="dashboard-content">
+        <!-- به صورت پویا با جاوااسکریپت و بر اساس چیدمان انتخابی پر می‌شود -->
+      </div>
+    </section>
+
+    <!-- صفحه ۲: مرور فلش‌کارت (Study Room) -->
+    <section id="screen-study" class="screen-view">
+      <!-- بخش مطالعه فلش‌کارت -->
+      <div class="study-container">
+        <!-- هدر مرور -->
+        <div class="study-header glass-card">
+          <div class="deck-info">
+            <span class="deck-tag">قلب و عروق • فیزیوپاتولوژی</span>
+            <h2 class="deck-title">الکتروکاردیوگرام (ECG) و آریتمی‌های قلبی</h2>
+          </div>
+          <div class="study-stats-pill">
+            <span class="stat-item text-danger">🔴 عقب‌افتاده: ۱۲</span>
+            <span class="stat-divider">|</span>
+            <span class="stat-item text-primary">🔵 مرور امروز: ۳۴</span>
+            <span class="stat-divider">|</span>
+            <span class="stat-item text-success">🟢 جدید: ۸</span>
+          </div>
+        </div>
+
+        <!-- کارت سه‌بعدی شیشه‌ای با قابلیت چرخش -->
+        <div class="flashcard-wrapper" id="flashcardWrapper">
+          <div class="flashcard glass-card" id="flashcard">
+            <!-- روی کارت (سؤال) -->
+            <div class="card-face card-front">
+              <div class="card-meta">
+                <span class="badge-difficulty">اولویت بالا (High Yield)</span>
+                <span class="card-hint-text">برای مشاهده پاسخ کلیک کنید یا Space بزنید</span>
+              </div>
+              <div class="question-body">
+                <p class="question-text">
+                  در یک بیمار ۲۸ ساله با دوره‌های متناوب تپش قلب، نوار قلب زیر کوتاهی فاصله PR و وجود موج دلتا (Delta Wave) را نشان می‌دهد. محتمل‌ترین تشخیص و خط اول درمان دارویی چیست؟
+                </p>
+                <div class="card-image-placeholder">
+                  <div class="image-overlay">
+                    <i data-lucide="activity"></i>
+                    <span>ECG: Short PR + Delta Wave (Wolff-Parkinson-White)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-action-hint">
+                <button class="btn-flip glass-btn-action" id="btnFlipCard">
+                  <i data-lucide="repeat"></i>
+                  <span>نمایش پاسخ و نکات بالینی</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- پشت کارت (پاسخ و نکات پزشکی) -->
+            <div class="card-face card-back">
+              <div class="card-meta">
+                <span class="badge-success">تشخیص قطعی و تحلیل FSRS</span>
+                <button class="btn-flip-back" id="btnFlipBack">
+                  <i data-lucide="rotate-ccw"></i> برگشت به سؤال
+                </button>
+              </div>
+              <div class="answer-body">
+                <div class="clinical-box success-accent">
+                  <h4>💡 پاسخ: سندرم ولف-پارکینسون-وایت (WPW Syndrome)</h4>
+                  <p>وجود مسیر فرعی (Bundle of Kent) که موجب پیش‌تحریکی بطنی، موج دلتا و کوتاه شدن فاصله PR (کمتر از ۱۲۰ میلی‌ثانیه) می‌شود.</p>
+                </div>
+                <div class="clinical-box warning-accent">
+                  <h4>⚠️ خط قرمز بالینی:</h4>
+                  <p>در فیبریلاسیون دهلیزی با WPW، مصرف داروهای مهارکننده گره AV (دیگوکسین، وراپامیل، بتابلاکر) به دلیل خطر فیبریلاسیون بطنی <strong>ممنوع (Contraindicated)</strong> است!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- نوار دکمه‌های پاسخ‌دهی الگوریتم FSRS / لایتنر -->
+        <div class="fsrs-buttons-panel glass-card" id="fsrsButtons">
+          <p class="fsrs-guide">میزان یادآوری خود را مشخص کنید (کلیدهای میانبر ۱ تا ۴):</p>
+          <div class="fsrs-grid">
+            <button class="fsrs-btn btn-again" data-rating="1">
+              <span class="rate-time">&lt; ۱ دقیقه</span>
+              <span class="rate-name">دوباره (Again)</span>
+              <span class="shortcut-key">کلید ۱</span>
+            </button>
+            <button class="fsrs-btn btn-hard" data-rating="2">
+              <span class="rate-time">۱۲ ساعت</span>
+              <span class="rate-name">سخت (Hard)</span>
+              <span class="shortcut-key">کلید ۲</span>
+            </button>
+            <button class="fsrs-btn btn-good" data-rating="3">
+              <span class="rate-time">۱ روز</span>
+              <span class="rate-name">خوب (Good)</span>
+              <span class="shortcut-key">کلید ۳</span>
+            </button>
+            <button class="fsrs-btn btn-easy" data-rating="4">
+              <span class="rate-time">۴ روز</span>
+              <span class="rate-name">راحت (Easy)</span>
+              <span class="shortcut-key">کلید ۴</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- صفحه ۳: حالت ریکاوری کارت‌های عقب‌افتاده (Recovery Mode) -->
+    <section id="screen-recovery" class="screen-view">
+      <div class="recovery-container">
+        <div class="recovery-hero glass-card">
+          <div class="hero-text">
+            <span class="badge-fire">🔥 سیستم بازیابی هوشمند MedCardy</span>
+            <h2>مدیریت و نجات کارت‌های عقب‌افتاده</h2>
+            <p>اجازه ندهید حجم کارت‌های گذشته شما را ناامید کند. الگوریتم هوشمند با توجه به زمان آزادی که دارید، کارت‌ها را بر اساس اولویت بالینی و ضریب فراموشی تفکیک می‌کند.</p>
+          </div>
+          <div class="recovery-summary-chips">
+            <div class="chip-item red">
+              <span class="chip-num">۴۸</span>
+              <span class="chip-label">کل کارت‌های عقب‌افتاده</span>
+            </div>
+            <div class="chip-item blue">
+              <span class="chip-num">۲۵ دقیقه</span>
+              <span class="chip-label">میانگین زمان نجات کل</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- تنظیم زمان آزاد توسط دانشجو -->
+        <div class="recovery-calculator glass-card">
+          <div class="calc-header">
+            <i data-lucide="clock"></i>
+            <h3>امروز چقدر زمان آزاد داری؟</h3>
+            <span class="slider-value-display" id="timeValueDisplay">۱۵ دقیقه</span>
+          </div>
+          <input type="range" id="timeSlider" min="5" max="45" step="5" value="15" class="custom-slider">
+          <div class="slider-ticks">
+            <span>۵ دقیقه (سریع)</span>
+            <span>۱۵ دقیقه (استاندارد)</span>
+            <span>۳۰ دقیقه (عمیق)</span>
+            <span>۴۵ دقیقه (کامل)</span>
+          </div>
+          
+          <div class="recovery-prescription" id="prescriptionBox">
+            <!-- نسخه بازیابی داینامیک -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- صفحه ۴: دروس و مباحث (Courses & Decks) -->
+    <section id="screen-courses" class="screen-view">
+      <div class="courses-container">
+        <div class="courses-header glass-card">
+          <h2>کتابخانه دروس پزشکی</h2>
+          <div class="search-box glass-input">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="جستجو در فیزیولوژی، فارما، قلب، اطفال...">
+          </div>
+        </div>
+        <div class="courses-grid" id="coursesGrid">
+          <!-- کارت‌های دروس با جاوااسکریپت پر می‌شوند -->
+        </div>
+      </div>
+    </section>
+
+    <!-- صفحه ۵: نتیجه جلسه و کارنامه (Session Results) -->
+    <section id="screen-results" class="screen-view">
+      <div class="results-container">
+        <div class="results-card glass-card">
+          <div class="celebration-badge">🎉 جلسه مرور با موفقیت به پایان رسید!</div>
+          <h2>خلاصه عملکرد امروز شما</h2>
+          <p class="subtitle">تلاش امروز شما پایداری حافظه بلندمدت را ۲۴٪ افزایش داد.</p>
+          
+          <div class="metrics-grid">
+            <div class="metric-card glass-panel">
+              <span class="metric-value text-primary">۳۲</span>
+              <span class="metric-title">کارت مرور شده</span>
+            </div>
+            <div class="metric-card glass-panel">
+              <span class="metric-value text-success">۸۸٪</span>
+              <span class="metric-title">نرخ یادآوری موفق</span>
+            </div>
+            <div class="metric-card glass-panel">
+              <span class="metric-value text-warning">۱۴:۲۰</span>
+              <span class="metric-title">زمان مطالعه (دقیقه)</span>
+            </div>
+            <div class="metric-card glass-panel">
+              <span class="metric-value text-danger">-۱۸</span>
+              <span class="metric-title">کاهش عقب‌افتادگی</span>
+            </div>
+          </div>
+
+          <div class="results-actions">
+            <button class="glass-btn primary lg" onclick="app.showScreen('dashboard')">
+              <i data-lucide="arrow-right"></i>
+              <span>بازگشت به داشبورد</span>
+            </button>
+            <button class="glass-btn outline lg" onclick="app.showScreen('recovery')">
+              <i data-lucide="refresh-cw"></i>
+              <span>ادامه مرور ریکاوری (۱۰ دقیقه)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- بارگذاری اسکریپت اصلی -->
+  <script src="js/app.js"></script>
+</body>
+</html>

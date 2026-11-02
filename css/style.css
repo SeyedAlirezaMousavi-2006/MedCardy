@@ -1,0 +1,1463 @@
+/* ==========================================================================
+   MedCardy Design System - Light Medical Blue & Glassmorphic UI
+   بخش ۱: متغیرها، پایه‌ها، پس‌زمینه نوری شیشه‌ای و کنترل‌بار بالا
+   ========================================================================== */
+
+:root {
+  /* پالت رنگی آبی پزشکی روشن و ملایم */
+  --bg-gradient-start: #f0f7ff;
+  --bg-gradient-mid: #e1effe;
+  --bg-gradient-end: #f4faff;
+
+  --med-primary: #0284c7;        /* آبی کلینیکال */
+  --med-primary-light: #38bdf8;  /* آبی آسمانی روشن */
+  --med-primary-dark: #0369a1;   /* آبی تیره عمیق */
+  --med-cyan: #06b6d4;           /* فیروزه‌ای جراحی */
+  --med-cyan-soft: #cffafe;      /* فیروزه‌ای پاستلی */
+  
+  --med-success: #10b981;        /* سبز موفقیت و یادآوری خوب */
+  --med-warning: #f59e0b;        /* کهربایی هشدار و سخت */
+  --med-danger: #ef4444;         /* قرمز دوباره و عقب‌افتاده */
+  --med-purple: #8b5cf6;         /* بنفش FSRS */
+
+  --text-main: #0f172a;          /* تیره خوانا برای متون پزشکی */
+  --text-muted: #475569;         /* خاکستری خوانا */
+  --text-light: #94a3b8;         /* خاکستری کم‌رنگ برای راهنماها */
+
+  /* ویژگی‌های شیشه‌ای (Glassmorphism Properties) */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-highlight: rgba(186, 230, 253, 0.9);
+  --glass-blur: blur(16px);
+  --glass-shadow: 0 10px 30px -5px rgba(2, 132, 199, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8);
+  --glass-shadow-hover: 0 16px 36px -6px rgba(2, 132, 199, 0.16), 0 0 0 1px rgba(56, 189, 248, 0.4);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  --transition-smooth: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ریست و پایه استایل */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  direction: rtl;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* پس‌زمینه نوری شیشه‌ای متحرک (Ambient Glow Orbs) */
+.ambient-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0) 70%);
+  top: -100px;
+  right: -80px;
+}
+
+.orb-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, rgba(59, 130, 246, 0) 70%);
+  bottom: -150px;
+  left: -100px;
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+
+.orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(165, 243, 252, 0.35) 0%, rgba(6, 182, 212, 0) 70%);
+  top: 40%;
+  left: 30%;
+  animation-duration: 26s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 30px) scale(1.08); }
+  100% { transform: translate(-30px, 50px) scale(0.95); }
+}
+
+/* محفظه اصلی صفحات */
+.app-container {
+  position: relative;
+  z-index: 10;
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 24px 20px 80px 20px;
+}
+
+/* نوار کنترل شیشه‌ای بالا (Variant Controller & Navigation) */
+.controller-bar {
+  position: sticky;
+  top: 14px;
+  z-index: 100;
+  margin: 14px 20px 0 20px;
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  background: var(--glass-bg);
+  transition: var(--transition-smooth);
+}
+
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--med-primary-dark);
+}
+
+.logo-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 6px rgba(2, 132, 199, 0.3));
+}
+
+.brand-name span {
+  color: var(--med-primary-light);
+}
+
+.badge-tag {
+  background: var(--med-cyan-soft);
+  color: var(--med-primary-dark);
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.switcher-pills {
+  display: flex;
+  background: rgba(224, 242, 254, 0.6);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  gap: 2px;
+}
+
+.pill-btn {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.pill-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pill-btn:hover {
+  color: var(--med-primary-dark);
+}
+
+.pill-btn.active {
+  background: #ffffff;
+  color: var(--med-primary);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(186, 230, 253, 0.8);
+}
+
+/* نوار ناوبری اصلی */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-item {
+  background: transparent;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 7px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+  position: relative;
+}
+
+.nav-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--med-primary);
+}
+
+.nav-item.active {
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--med-primary-dark);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.counter-badge {
+  background: var(--med-danger);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.35);
+}
+
+/* ==========================================================================
+   بخش ۲: سیستم کارت‌های شیشه‌ای و ۳ سبک دکمه‌ها (Button Styles)
+   ========================================================================== */
+
+/* استایل عمومی کارت‌های شیشه‌ای (Glass Cards) */
+.glass-card, .glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-smooth);
+}
+
+.glass-card:hover {
+  box-shadow: var(--glass-shadow-hover);
+  border-color: var(--glass-border-highlight);
+}
+
+/* --------------------------------------------------------------------------
+   سیستم استایل دکمه‌ها بر اساس کلاس بدنه
+   -------------------------------------------------------------------------- */
+
+/* پایه دکمه‌های عمومی */
+.glass-btn {
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-btn.lg {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg);
+}
+
+.glass-btn.sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  border-radius: var(--radius-sm);
+}
+
+.glass-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ۱. استایل دکمه شیشه‌ای کریستالی (Crystal Glass) */
+.btn-style-glass .glass-btn.primary {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.85) 0%, rgba(14, 165, 233, 0.85) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.btn-style-glass .glass-btn.primary:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(3, 105, 161, 0.95) 0%, rgba(2, 132, 199, 0.95) 100%);
+  box-shadow: 0 12px 24px -4px rgba(2, 132, 199, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.btn-style-glass .glass-btn.outline {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--med-primary-dark);
+  border: 1px solid rgba(186, 230, 253, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.btn-style-glass .glass-btn.outline:hover {
+  background: rgba(224, 242, 254, 0.8);
+  transform: translateY(-2px);
+  border-color: var(--med-primary);
+}
+
+.btn-style-glass .glass-btn.danger {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.85) 0%, rgba(248, 113, 113, 0.85) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 18px -4px rgba(239, 68, 68, 0.35);
+}
+
+.btn-style-glass .glass-btn.danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px -4px rgba(239, 68, 68, 0.45);
+}
+
+/* ۲. استایل دکمه سه‌بعدی و گیمین (3D Duolingo Tactile) */
+.btn-style-3d .glass-btn {
+  border-radius: var(--radius-md);
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.btn-style-3d .glass-btn.primary {
+  background: #0284c7;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 5px 0 #0369a1, 0 10px 18px rgba(2, 132, 199, 0.3);
+}
+
+.btn-style-3d .glass-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #0369a1, 0 14px 22px rgba(2, 132, 199, 0.35);
+}
+
+.btn-style-3d .glass-btn.primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #0369a1, 0 4px 10px rgba(2, 132, 199, 0.2);
+}
+
+.btn-style-3d .glass-btn.outline {
+  background: #ffffff;
+  color: var(--med-primary-dark);
+  border: 2px solid #bae6fd;
+  box-shadow: 0 4px 0 #93c5fd;
+}
+
+.btn-style-3d .glass-btn.outline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #93c5fd;
+}
+
+.btn-style-3d .glass-btn.outline:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #93c5fd;
+}
+
+.btn-style-3d .glass-btn.danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  box-shadow: 0 5px 0 #b91c1c, 0 10px 16px rgba(239, 68, 68, 0.3);
+}
+
+.btn-style-3d .glass-btn.danger:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #b91c1c;
+}
+
+/* ۳. استایل دکمه خطی مینیمال کلینیکال (Clinical Sleek Outline) */
+.btn-style-outline .glass-btn {
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1.5px solid var(--med-primary);
+  color: var(--med-primary);
+}
+
+.btn-style-outline .glass-btn.primary {
+  background: var(--med-primary);
+  color: #ffffff;
+}
+
+.btn-style-outline .glass-btn.primary:hover {
+  background: var(--med-primary-dark);
+}
+
+.btn-style-outline .glass-btn.outline {
+  border-color: rgba(2, 132, 199, 0.4);
+  color: var(--med-primary-dark);
+}
+
+.btn-style-outline .glass-btn.outline:hover {
+  border-color: var(--med-primary);
+  background: rgba(2, 132, 199, 0.05);
+}
+
+.btn-style-outline .glass-btn.danger {
+  border-color: var(--med-danger);
+  background: transparent;
+  color: var(--med-danger);
+}
+
+.btn-style-outline .glass-btn.danger:hover {
+  background: var(--med-danger);
+  color: #ffffff;
+}
+
+/* کنترل نمایش صفحات */
+.screen-view {
+  display: none;
+  animation: fadeInView 0.35s ease-out forwards;
+}
+
+.screen-view.active {
+  display: block;
+}
+
+@keyframes fadeInView {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   بخش ۳: استایل‌های اختصاصی ۴ چیدمان داشبورد (Dashboard Variants)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   واریانت ۱: چیدمان کویزلت مدرن (Quizlet Modern)
+   -------------------------------------------------------------------------- */
+.layout-quizlet .dash-hero {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.layout-quizlet .hero-main-card {
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.layout-quizlet .hero-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.layout-quizlet .hero-title-row h1 {
+  font-size: 1.6rem;
+  color: var(--med-primary-dark);
+  font-weight: 800;
+}
+
+.layout-quizlet .study-prompt {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.layout-quizlet .action-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.layout-quizlet .stats-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stat-box-quizlet {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-box-quizlet .stat-info h4 {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.stat-box-quizlet .stat-info .num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.stat-box-quizlet svg {
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
+}
+
+.layout-quizlet .decks-section h3 {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.quizlet-deck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.quizlet-deck-card {
+  padding: 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+
+.quizlet-deck-card:hover {
+  transform: translateY(-4px);
+}
+
+.deck-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.deck-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.deck-tags {
+  font-size: 0.82rem;
+  color: var(--med-primary);
+}
+
+.deck-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(2, 132, 199, 0.12);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.deck-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--med-primary-light), var(--med-primary));
+  border-radius: var(--radius-pill);
+}
+
+/* --------------------------------------------------------------------------
+   واریانت ۲: چیدمان دولینگو انگیزشی (Duolingo Pulse)
+   -------------------------------------------------------------------------- */
+.layout-duolingo .gamify-hero {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(224, 242, 254, 0.75) 100%);
+  padding: 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+}
+
+.streak-badge-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.flame-icon-pulse {
+  font-size: 3rem;
+  animation: flameBounce 1.8s infinite ease-in-out;
+  filter: drop-shadow(0 4px 12px rgba(249, 115, 22, 0.4));
+}
+
+@keyframes flameBounce {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(5deg); }
+}
+
+.streak-text h2 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ea580c;
+  line-height: 1.2;
+}
+
+.streak-text p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.daily-goal-container {
+  flex: 1;
+  max-width: 450px;
+}
+
+.goal-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.duo-progress-track {
+  width: 100%;
+  height: 16px;
+  background: rgba(203, 213, 225, 0.5);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  padding: 2px;
+}
+
+.duo-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: var(--radius-pill);
+  position: relative;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.duo-quest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.quest-card {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.quest-icon {
+  font-size: 2.2rem;
+}
+
+.quest-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.quest-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.duo-big-action {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.duo-play-btn {
+  font-size: 1.25rem !important;
+  padding: 18px 48px !important;
+  border-radius: var(--radius-pill) !important;
+  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.4) !important;
+  animation: pulseGlow 2.5s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35); }
+  50% { box-shadow: 0 14px 35px rgba(2, 132, 199, 0.6); }
+}
+
+/* --------------------------------------------------------------------------
+   واریانت ۳: چیدمان آنکی کامند سنتر (Anki Command Center)
+   -------------------------------------------------------------------------- */
+.layout-anki .anki-matrix-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  margin-top: 14px;
+}
+
+.layout-anki .anki-matrix-table th {
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-align: right;
+  border-bottom: 2px solid rgba(2, 132, 199, 0.15);
+}
+
+.layout-anki .anki-row {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  transition: var(--transition-smooth);
+}
+
+.layout-anki .anki-row:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.008);
+}
+
+.layout-anki .anki-row td {
+  padding: 14px 16px;
+  font-size: 0.9rem;
+}
+
+.layout-anki .anki-row td:first-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-weight: 700;
+}
+
+.layout-anki .anki-row td:last-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.anki-badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.anki-badge.new { background: #dbeafe; color: #1d4ed8; }
+.anki-badge.learning { background: #fef3c7; color: #b45309; }
+.anki-badge.due { background: #dcfce7; color: #15803d; }
+.anki-badge.overdue { background: #fee2e2; color: #b91c1c; }
+
+/* هیت‌مپ روزانه مشابه گیت‌هاب */
+.heatmap-container {
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.heatmap-grid {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.heatmap-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.heatmap-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgba(224, 242, 254, 0.7);
+  transition: var(--transition-smooth);
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.3);
+}
+
+.heatmap-cell.level-1 { background: #bae6fd; }
+.heatmap-cell.level-2 { background: #7dd3fc; }
+.heatmap-cell.level-3 { background: #0284c7; }
+.heatmap-cell.level-4 { background: #0369a1; }
+
+/* --------------------------------------------------------------------------
+   واریانت ۴: چیدمان شیفت و کشیک (Clinical Shift Mode)
+   -------------------------------------------------------------------------- */
+.layout-shift .shift-warning-card {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(254, 242, 242, 0.9) 100%);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.layout-shift .shift-urgent-title {
+  color: #b91c1c;
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.layout-shift .thumb-friendly-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.thumb-action-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  cursor: pointer;
+  border: 2px solid rgba(2, 132, 199, 0.2);
+}
+
+.thumb-action-card:hover {
+  border-color: var(--med-primary);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-4px);
+}
+
+.thumb-action-card .icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0f2fe;
+  color: var(--med-primary);
+}
+
+.thumb-action-card .icon-circle svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* ==========================================================================
+   بخش ۴: صفحه مطالعه فلش‌کارت و چرخش سه‌بعدی
+   ========================================================================== */
+.study-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.study-header {
+  padding: 18px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.deck-tag {
+  font-size: 0.8rem;
+  color: var(--med-primary);
+  font-weight: 600;
+}
+
+.deck-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-top: 4px;
+}
+
+.study-stats-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.stat-divider {
+  color: #cbd5e1;
+}
+
+/* کارت چرخان ۳بعدی */
+.flashcard-wrapper {
+  perspective: 1200px;
+  margin-bottom: 24px;
+  min-height: 360px;
+}
+
+.flashcard {
+  width: 100%;
+  min-height: 360px;
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.flashcard.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.badge-difficulty {
+  background: #fee2e2;
+  color: #dc2626;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.card-hint-text {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.question-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.card-image-placeholder {
+  background: #0f172a;
+  color: #38bdf8;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+}
+
+.image-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: monospace;
+  font-size: 0.9rem;
+  direction: ltr;
+}
+
+.card-action-hint {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.glass-btn-action {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--med-primary);
+  border: 1px solid rgba(2, 132, 199, 0.3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+}
+
+.glass-btn-action:hover {
+  background: var(--med-primary);
+  color: #ffffff;
+}
+
+.btn-flip-back {
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--med-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.clinical-box {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+}
+
+.clinical-box.success-accent {
+  background: rgba(16, 185, 129, 0.1);
+  border-right: 4px solid var(--med-success);
+}
+
+.clinical-box.warning-accent {
+  background: rgba(245, 158, 11, 0.1);
+  border-right: 4px solid var(--med-warning);
+}
+
+.clinical-box h4 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.clinical-box p {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   بخش ۵: دکمه‌های الگوریتم FSRS، حالت ریکاوری، نتایج و واکنش‌گرایی موبایل
+   ========================================================================== */
+
+/* پنل دکمه‌های FSRS */
+.fsrs-buttons-panel {
+  padding: 20px 24px;
+}
+
+.fsrs-guide {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.fsrs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.fsrs-btn {
+  font-family: inherit;
+  border: none;
+  padding: 12px 10px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition-smooth);
+}
+
+.fsrs-btn .rate-time {
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.fsrs-btn .rate-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.fsrs-btn .shortcut-key {
+  font-size: 0.7rem;
+  opacity: 0.75;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.fsrs-btn.btn-again {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.fsrs-btn.btn-again:hover {
+  background: #dc2626;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
+}
+
+.fsrs-btn.btn-hard {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.fsrs-btn.btn-hard:hover {
+  background: #d97706;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(217, 119, 6, 0.3);
+}
+
+.fsrs-btn.btn-good {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.fsrs-btn.btn-good:hover {
+  background: #059669;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(5, 150, 105, 0.3);
+}
+
+.fsrs-btn.btn-easy {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+  border: 1px solid rgba(2, 132, 199, 0.3);
+}
+
+.fsrs-btn.btn-easy:hover {
+  background: #0284c7;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(2, 132, 199, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   استایل صفحه Recovery Mode
+   -------------------------------------------------------------------------- */
+.recovery-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.recovery-hero {
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.badge-fire {
+  display: inline-block;
+  background: #ffedd5;
+  color: #c2410c;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 12px;
+}
+
+.recovery-summary-chips {
+  display: flex;
+  gap: 14px;
+}
+
+.chip-item {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  min-width: 120px;
+}
+
+.chip-item.red {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.chip-item.red .chip-num {
+  color: #b91c1c;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: block;
+}
+
+.chip-item.blue {
+  background: rgba(2, 132, 199, 0.1);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+}
+
+.chip-item.blue .chip-num {
+  color: #0369a1;
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: block;
+}
+
+.chip-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.recovery-calculator {
+  padding: 28px;
+}
+
+.calc-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.calc-header svg {
+  color: var(--med-primary);
+  width: 24px;
+  height: 24px;
+}
+
+.slider-value-display {
+  margin-right: auto;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--med-primary-dark);
+  background: #e0f2fe;
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+}
+
+.custom-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: #cbd5e1;
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--med-primary);
+  margin-bottom: 10px;
+}
+
+.slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-bottom: 24px;
+}
+
+.prescription-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.prescription-info h4 {
+  color: var(--med-primary-dark);
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.prescription-info p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* --------------------------------------------------------------------------
+   استایل بخش نتایج و واکنش‌گرایی موبایل
+   -------------------------------------------------------------------------- */
+.results-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.results-card {
+  padding: 36px;
+  text-align: center;
+}
+
+.celebration-badge {
+  display: inline-block;
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 700;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
+}
+
+.results-card h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.results-card .subtitle {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.metric-card {
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  display: block;
+}
+
+.metric-title {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* واکنش‌گرایی برای موبایل */
+@media (max-width: 860px) {
+  .controller-bar {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 10px;
+    padding: 12px;
+  }
+  
+  .control-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .switcher-pills {
+    width: 100%;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .main-nav {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .layout-quizlet .dash-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .duo-quest-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fsrs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .layout-shift .thumb-friendly-grid {
+    grid-template-columns: 1fr;
+  }
+}
