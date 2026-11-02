@@ -29,6 +29,20 @@
     
     <!-- نوار وضعیت بالای موبایل (App Top Header) -->
     <header class="app-header glass-header">
+      <!-- نوار پلتفرم جامع مدکاردی (MedCardy Platform Ecosystem Bar) -->
+      <div class="ecosystem-top-row">
+        <div class="platform-brand">
+          <span class="platform-logo">🫀</span>
+          <span class="platform-name">Med<strong>Cardy</strong></span>
+          <span class="platform-tag">اکوسیستم آموزش پزشکی</span>
+        </div>
+        <button class="module-switch-pill" id="btnOpenModuleModal" title="تغییر ماژول سامانه">
+          <span class="pulse-indicator"></span>
+          <span class="module-text">ماژول: فلش‌کارت و مرور</span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+      </div>
+
       <div class="header-main-row">
         <div class="user-profile-pill">
           <div class="avatar-circle">🩺</div>
@@ -111,11 +125,15 @@
               <span>داشبورد</span>
             </button>
             <div class="study-progress-info">
-              <span class="current-deck-name">قلب و عروق • ECG</span>
+              <span class="current-deck-name" id="studyDeckTitle">قلب و عروق • ECG</span>
               <div class="study-counter-dots">
                 <span class="dot-due">۱۲ عقب‌افتاده</span>
                 <span class="dot-today">۳۴ امروز</span>
               </div>
+            </div>
+            <!-- ویژگی اختصاصی هر حالت در بالای مطالعه -->
+            <div class="study-mode-accent" id="studyModeAccent">
+              <!-- با JS داینامیک می‌شود -->
             </div>
           </div>
 
@@ -251,12 +269,8 @@
       <!-- ۴. صفحه دروس و مباحث (Courses) -->
       <section id="screen-courses" class="screen-view">
         <div class="courses-mobile-view">
-          <div class="courses-search-bar glass-card">
-            <i data-lucide="search"></i>
-            <input type="text" placeholder="جستجو در درس‌ها، علائم بالینی و داروها...">
-          </div>
-          <div class="courses-list" id="coursesGrid">
-            <!-- با جاوااسکریپت پر می‌شود -->
+          <div id="coursesDynamicContent">
+            <!-- به صورت پویا با ساختار اختصاصی هر حالت (مسیر دولینگو، درخت آنکی، ست‌های کویزلت، تریاژ شیفت) پر می‌شود -->
           </div>
         </div>
       </section>
@@ -335,6 +349,59 @@
         <span>کارنامه</span>
       </button>
     </nav>
+
+    <!-- مودال اکوسیستم جامع مدکاردی (MedCardy Platform Modules Modal) -->
+    <div class="bottom-sheet-backdrop" id="moduleModalBackdrop">
+      <div class="bottom-sheet glass-card">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div>
+            <h3>اکوسیستم پزشکی MedCardy</h3>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">انتخاب ماژول تخصصی پلتفرم</p>
+          </div>
+          <button class="close-sheet-btn" id="btnCloseModuleModal">&times;</button>
+        </div>
+        <div class="sheet-body">
+          <div class="platform-modules-grid">
+            <div class="module-card active" onclick="app.selectModule('flashcards')">
+              <div class="mod-icon">🫀</div>
+              <div class="mod-info">
+                <h4>فلش‌کارت و مرور FSRS</h4>
+                <p>سیستم مرور با فواصل زمانی علمی، لایتنر و هوش مصنوعی (ماژول فعال)</p>
+              </div>
+              <span class="active-mod-badge">فعال</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول بانک تست به زودی فعال می‌شود')">
+              <div class="mod-icon">📝</div>
+              <div class="mod-info">
+                <h4>بانک سؤالات و آزمون‌ها (Q-Bank)</h4>
+                <p>آزمون‌های پره‌انترنی، دستیاری و صلاحیت بالینی با تحلیل آماری</p>
+              </div>
+              <span class="badge-tag">نسخه ۲</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول اطلس بالینی به زودی فعال می‌شود')">
+              <div class="mod-icon">🔬</div>
+              <div class="mod-info">
+                <h4>اطلس بالینی و تصاویر تشخیصی</h4>
+                <p>مجموعه ECGهای مشکوک، رادیوگرافی، CT اسکن و کیس‌های تعاملی</p>
+              </div>
+              <span class="badge-tag">نسخه ۲</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول محاسبه‌گر به زودی فعال می‌شود')">
+              <div class="mod-icon">🧮</div>
+              <div class="mod-info">
+                <h4>محاسبه‌گرهای پزشکی اورژانس</h4>
+                <p>محاسبه GFR، اصلاح سدیم، CHADS-VASc و دوز آنتی‌بیوتیک‌ها</p>
+              </div>
+              <span class="badge-tag">نسخه ۲</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- مودال/باتم شیت تنظیمات استایل دکمه‌ها و پالت (Design Customizer Sheet) -->
     <div class="bottom-sheet-backdrop" id="variantSheetBackdrop">

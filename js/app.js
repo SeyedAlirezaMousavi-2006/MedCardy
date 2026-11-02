@@ -51,7 +51,7 @@ const mobileDashboardTemplates = {
 
         <button class="glass-btn primary block-btn lg" onclick="app.showScreen('study')">
           <i data-lucide="play-circle"></i>
-          <span>شروع مرور هوشمند (۳۴ کارت)</span>
+          <span>مرور هوشمند • ۳۴ کارت</span>
         </button>
       </div>
 
@@ -100,7 +100,7 @@ const mobileDashboardTemplates = {
         <div class="duo-pulse-action">
           <button class="glass-btn primary block-btn duo-pulse-btn" onclick="app.showScreen('study')">
             <i data-lucide="zap"></i>
-            <span>حفظ زنجیره و مطالعه (۳۴ کارت)</span>
+            <span>ادامه زنجیره • ۳۴ کارت</span>
           </button>
         </div>
       </div>
@@ -221,7 +221,7 @@ const app = {
     lucide.createIcons();
   },
 
-  // تعویض چیدمان داشبورد
+  // تعویض چیدمان داشبورد و سراسر پلتفرم
   setLayout(variant) {
     appState.activeLayout = variant;
     document.body.setAttribute('data-layout', variant);
@@ -231,7 +231,48 @@ const app = {
     });
 
     this.renderDashboard();
-    this.showToast(`چیدمان به «${variant}» تغییر یافت`);
+    this.renderCourses();
+    this.updateStudyRoomAccent();
+    this.showToast(`حالت به «${variant}» تغییر یافت`);
+  },
+
+  // شروع مطالعه یک دک خاص با عنوان داینامیک
+  startDeckStudy(deckTitle) {
+    const titleEl = document.getElementById('studyDeckTitle');
+    if (titleEl && deckTitle) {
+      titleEl.textContent = deckTitle;
+    }
+    this.showScreen('study');
+  },
+
+  // به‌روزرسانی نوار بالای مطالعه متناسب با حالت انتخابی (دولینگو / آنکی / شیفت / کویزلت)
+  updateStudyRoomAccent() {
+    const container = document.getElementById('studyModeAccent');
+    if (!container) return;
+
+    if (appState.activeLayout === 'duolingo') {
+      container.innerHTML = `
+        <div class="duo-hearts-pill" title="جون‌های باقی‌مانده آزمون">
+          <span>❤️❤️❤️</span>
+          <span style="color:#ea580c; font-weight:800;">+15 XP</span>
+        </div>
+      `;
+    } else if (appState.activeLayout === 'anki') {
+      container.innerHTML = `
+        <div class="anki-fsrs-study-pill" title="پارامتر پایداری حافظه FSRS v4">
+          <span>FSRS: S=14.2d | R=92%</span>
+        </div>
+      `;
+    } else if (appState.activeLayout === 'shift') {
+      container.innerHTML = `
+        <div class="shift-timer-pill" title="زمان‌سنج تریاژ بالینی">
+          <span>⏱️ ۰۰:۱۸</span>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `<span class="badge-tag">کارت ۱ از ۱۲</span>`;
+    }
+    lucide.createIcons();
   },
 
   // تغییر استایل دکمه‌ها
@@ -259,6 +300,22 @@ const app = {
     }
   },
 
+  // کنترل باز و بسته شدن مودال اکوسیستم مدکاردی
+  toggleModuleModal(show) {
+    const backdrop = document.getElementById('moduleModalBackdrop');
+    if (!backdrop) return;
+    if (typeof show === 'boolean') {
+      backdrop.classList.toggle('active', show);
+    } else {
+      backdrop.classList.toggle('active');
+    }
+  },
+
+  selectModule(modName) {
+    this.toggleModuleModal(false);
+    this.showToast('ماژول فلش‌کارت و مرور فعال است.');
+  },
+
   // تعویض صفحات اپلیکیشن با نوار ناوبری پایین
   showScreen(screenId) {
     appState.activeScreen = screenId;
@@ -279,6 +336,9 @@ const app = {
 
     if (screenId === 'study') {
       this.resetCardState();
+      this.updateStudyRoomAccent();
+    } else if (screenId === 'courses') {
+      this.renderCourses();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -348,24 +408,147 @@ const app = {
     lucide.createIcons();
   },
 
-  // رندر لیست مباحث در تب دروس
+  // رندر کامپوننت دروس متناسب با ۴ حالت مختلف
   renderCourses() {
-    const container = document.getElementById('coursesGrid');
+    const container = document.getElementById('coursesDynamicContent');
     if (!container) return;
 
-    container.innerHTML = medicalDecks.map(d => `
-      <div class="mobile-deck-card glass-card" onclick="app.showScreen('study')">
-        <div class="m-deck-header">
-          <span>${d.category}</span>
-          <span>کل: ${d.cards} کارت</span>
+    // ۱. حالت دولینگو: مسیر یادگیری مرحله‌ای (Learning Path)
+    if (appState.activeLayout === 'duolingo') {
+      container.innerHTML = `
+        <div class="glass-card" style="padding:16px; margin-bottom:14px; text-align:center;">
+          <h3 style="font-size:1.1rem; font-weight:900; color:#ea580c;">نقشه یادگیری دولینگو (Learning Path)</h3>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">با فتح هر مرحله، گره بعدی قفل‌گشایی می‌شود!</p>
         </div>
-        <h4 class="m-deck-title">${d.title}</h4>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
-          <span class="m-deck-due-tag">⚠️ ${d.due} کارت در نوبت مرور</span>
-          <button class="glass-btn outline sm">شروع</button>
+
+        <div class="duo-path-view">
+          <div class="path-node-row" onclick="app.startDeckStudy('الکتروکاردیوگرام و آریتمی‌ها')">
+            <div class="path-circle-node completed">
+              <span class="node-stars-badge">★★★</span>
+              <span>🫀</span>
+            </div>
+            <span class="node-title-chip">۱. آریتمی‌های قلبی</span>
+          </div>
+
+          <div class="path-connector-line"></div>
+
+          <div class="path-node-row" onclick="app.startDeckStudy('داروهای اعصاب و روان و بیهوشی')">
+            <div class="path-circle-node completed">
+              <span class="node-stars-badge">★★☆</span>
+              <span>💊</span>
+            </div>
+            <span class="node-title-chip">۲. فارماکولوژی بالینی</span>
+          </div>
+
+          <div class="path-connector-line"></div>
+
+          <div class="path-node-row" onclick="app.startDeckStudy('بیماری‌های انسدادی ریه')">
+            <div class="path-circle-node" style="border-color:#0284c7; box-shadow: 0 0 16px rgba(2,132,199,0.5);">
+              <span class="node-stars-badge">★☆☆</span>
+              <span>🫁</span>
+            </div>
+            <span class="node-title-chip" style="background:#e0f2fe; color:#0369a1;">۳. آسم و COPD (فعال)</span>
+          </div>
+
+          <div class="path-connector-line"></div>
+
+          <div class="path-node-row" onclick="app.showToast('این مرحله قفل است! ابتدا مرحله ۳ را تکمیل کنید.')">
+            <div class="path-circle-node locked">
+              <span>🔒</span>
+            </div>
+            <span class="node-title-chip">۴. مننژیت و مایع مغزی</span>
+          </div>
+
+          <div class="path-connector-line"></div>
+
+          <div class="path-node-row" onclick="app.showToast('آزمون نهایی جامع پره‌انترنی')">
+            <div class="path-circle-node" style="border-color:#f59e0b; background:#fffbeb;">
+              <span>🏆</span>
+            </div>
+            <span class="node-title-chip" style="color:#b45309;">۵. جام پره‌انترنی</span>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    } 
+    // ۲. حالت آنکی: ماتریس درختی و دیتامحور
+    else if (appState.activeLayout === 'anki') {
+      container.innerHTML = `
+        <div class="glass-card" style="padding:16px; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:1.05rem; font-weight:800;">درخت دک‌های آنکی (Hierarchical Decks)</h3>
+            <span class="anki-fsrs-badge">ماتریس FSRS v4</span>
+          </div>
+        </div>
+
+        <div class="anki-decks-tree">
+          ${medicalDecks.map(deck => `
+            <div class="mobile-deck-card glass-card" onclick="app.startDeckStudy('${deck.title}')" style="margin-bottom:10px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <h4 style="font-size:0.92rem; font-weight:700;">📁 ${deck.title}</h4>
+                  <span style="font-size:0.72rem; color:var(--text-light);">${deck.category}</span>
+                </div>
+                <div class="anki-card-chips">
+                  <span class="anki-chip due" title="سررسید">${deck.due}</span>
+                  <span class="anki-chip overdue" title="عقب‌افتاده">${deck.overdue}</span>
+                  <span class="anki-chip new" title="جدید">${deck.newCards}</span>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } 
+    // ۳. حالت شیفت و اورژانس: تفکیک بر اساس بخش‌های بیمارستان
+    else if (appState.activeLayout === 'shift') {
+      container.innerHTML = `
+        <div class="glass-card" style="padding:16px; margin-bottom:14px; border-right:4px solid var(--med-danger);">
+          <h3 style="font-size:1.05rem; font-weight:800; color:#b91c1c;">تریاژ مباحث بر اساس بخش‌های بیمارستان</h3>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">کارت‌های بالینی تفکیک‌شده برای کشیک‌های فشرده</p>
+        </div>
+
+        <div class="shift-wards-grid" style="display:grid; grid-template-columns:1fr; gap:10px;">
+          <div class="mobile-deck-card glass-card" onclick="app.startDeckStudy('اورژانس قلب و ECG')" style="border-right:3px solid #ef4444;">
+            <h4 style="font-weight:800;">🚨 اورژانس و تروما روم (۱۲ کارت حیاتی)</h4>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">پروتکل‌های احیا، شوک و اینتوباسیون فوری</p>
+          </div>
+          <div class="mobile-deck-card glass-card" onclick="app.startDeckStudy('داروهای بخش مسمومین')" style="border-right:3px solid #f59e0b;">
+            <h4 style="font-weight:800;">🧪 مسمومیت‌ها و پادزهرها (۸ کارت)</h4>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">آنتی‌دوت‌های اورژانسی و گاواژ معده</p>
+          </div>
+          <div class="mobile-deck-card glass-card" onclick="app.startDeckStudy('مراقبت‌های ویژه ICU و ABG')" style="border-right:3px solid #0284c7;">
+            <h4 style="font-weight:800;">🏥 مراقبت‌های ویژه ICU (۶ کارت)</h4>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">تنظیم ونتیلاتور و اختلالات اسید-باز</p>
+          </div>
+        </div>
+      `;
+    } 
+    // ۴. حالت پیش‌فرض کویزلت مدرن
+    else {
+      container.innerHTML = `
+        <div class="courses-search-bar glass-card" style="margin-bottom:14px; padding:10px 14px; display:flex; align-items:center; gap:8px;">
+          <i data-lucide="search" style="color:var(--text-light); width:18px;"></i>
+          <input type="text" placeholder="جستجو در درس‌ها، داروها و علائم..." style="border:none; background:transparent; width:100%; outline:none; font-family:inherit; font-size:0.85rem;">
+        </div>
+
+        <div class="courses-list">
+          ${medicalDecks.map(d => `
+            <div class="mobile-deck-card glass-card" onclick="app.startDeckStudy('${d.title}')" style="margin-bottom:12px;">
+              <div class="m-deck-header">
+                <span>${d.category}</span>
+                <span>کل: ${d.cards} کارت</span>
+              </div>
+              <h4 class="m-deck-title">${d.title}</h4>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <span class="m-deck-due-tag">⚠️ ${d.due} کارت در نوبت مرور</span>
+                <span style="font-size:0.74rem; color:var(--med-primary); font-weight:700;">مطالعه ←</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+    lucide.createIcons();
   },
 
   // پیام اطلاع‌رسانی Toast
@@ -409,6 +592,24 @@ const app = {
         this.setLayout(btn.getAttribute('data-variant'));
       });
     });
+
+    // مودال اکوسیستم جامع مدکاردی
+    const btnOpenModule = document.getElementById('btnOpenModuleModal');
+    if (btnOpenModule) {
+      btnOpenModule.addEventListener('click', () => this.toggleModuleModal(true));
+    }
+
+    const btnCloseModule = document.getElementById('btnCloseModuleModal');
+    if (btnCloseModule) {
+      btnCloseModule.addEventListener('click', () => this.toggleModuleModal(false));
+    }
+
+    const moduleBackdrop = document.getElementById('moduleModalBackdrop');
+    if (moduleBackdrop) {
+      moduleBackdrop.addEventListener('click', (e) => {
+        if (e.target === moduleBackdrop) this.toggleModuleModal(false);
+      });
+    }
 
     // باتم‌شیت تنظیم دکمه‌ها
     const btnToggleSheet = document.getElementById('btnToggleVariantSheet');
