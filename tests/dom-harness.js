@@ -596,6 +596,9 @@ function getMilestoneStatus(htmlPath, appJsPath, cssPath) {
   const m1Ready = hasPlatformHub && hasBreadcrumbs && hasPurchasedCourses && hasActiveSession;
   const m2Ready = m1Ready && appJsContent.includes('shift-wards-grid') && appJsContent.includes('duo-progress-container');
   const m3Ready = cssInspection.syntaxValid && cssInspection.tokens.hasMobileMedia && cssInspection.tokens.hasDesktopMedia;
+  const tier5Path = path.resolve(__dirname, 'tier5-m3-m4.js');
+  const hasTier5 = fs.existsSync(tier5Path);
+  const m4Ready = m1Ready && m2Ready && m3Ready && hasTier5 && appJsContent.includes('VALID_LAYOUTS') && appJsContent.includes('hasOwnProperty');
 
   const isStrictMode = process.argv.includes('--strict') || process.env.STRICT_E2E === '1';
 
@@ -609,6 +612,7 @@ function getMilestoneStatus(htmlPath, appJsPath, cssPath) {
     m1Ready,
     m2Ready,
     m3Ready,
+    m4Ready,
     cssInspection
   };
 }

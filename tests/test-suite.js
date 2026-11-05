@@ -1,10 +1,11 @@
 /**
  * MedCardy Comprehensive E2E Test Suite Runner
- * Executes all 4 tiers of tests:
+ * Executes all 5 tiers of tests:
  *  - Tier 1: Feature Coverage (60 tests)
  *  - Tier 2: Boundary & Corner Cases (60 tests)
  *  - Tier 3: Cross-Feature Interactions (12 tests)
  *  - Tier 4: Real-World Clinical Application Scenarios (5 tests)
+ *  - Tier 5: Milestone 3 Responsive Styling & Milestone 4 Hardening Verification (45 tests)
  *
  * Usage:
  *  node tests/test-suite.js              # Standard progressive execution (exits 0)
@@ -25,7 +26,7 @@ const targetTier = tierArg ? parseInt(tierArg.split('=')[1], 10) : null;
 
 // Print Test Suite Banner
 console.log('='.repeat(72));
-console.log('  🫀 MedCardy UI/UX E2E Test Suite - 4-Tier Verification');
+console.log('  🫀 MedCardy UI/UX E2E Test Suite - 5-Tier Verification (182 Tests)');
 console.log('='.repeat(72));
 
 const status = getMilestoneStatus(HTML_PATH, APP_JS_PATH, CSS_PATH);
@@ -34,6 +35,7 @@ console.log(`Milestone Readiness:`);
 console.log(`  - M1 (Platform Hub & Data Architecture): ${status.m1Ready ? 'READY' : 'PENDING'}`);
 console.log(`  - M2 (4 Dashboard Layouts & Switchers):  ${status.m2Ready ? 'READY' : 'PENDING'}`);
 console.log(`  - M3 (CSS Glassmorphism & Responsive):   ${status.m3Ready ? 'READY' : 'PENDING'}`);
+console.log(`  - M4 (Hardening & Verification):         ${status.m4Ready ? 'READY' : 'PENDING'}`);
 console.log('='.repeat(72) + '\n');
 
 // Load selected tier or all tiers
@@ -49,3 +51,7 @@ if (!targetTier || targetTier === 3) {
 if (!targetTier || targetTier === 4) {
   require('./tier4-scenarios.js');
 }
+if (!targetTier || targetTier === 5) {
+  require('./tier5-m3-m4.js');
+}
+

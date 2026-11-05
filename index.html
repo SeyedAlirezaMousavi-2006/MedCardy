@@ -94,17 +94,17 @@
     <main class="content-canvas">
 
       <!-- نوار موقعیت و بازگشت به پلتفرم اصلی (Module Breadcrumbs & Platform Return) -->
-      <div class="module-breadcrumb-bar glass-card" id="moduleBreadcrumbs" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; margin-bottom:12px; gap:8px;">
+      <div class="module-breadcrumb-bar glass-card" id="moduleBreadcrumbs">
         <button class="back-to-platform-btn" id="btnBackToPlatform" onclick="app.backToPlatform()" title="بازگشت به پلتفرم اصلی">
           <i data-lucide="arrow-right"></i>
           <span>بازگشت به پلتفرم اصلی</span>
         </button>
-        <div class="breadcrumb-trail" id="breadcrumbTrail" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-muted, #64748b);">
-          <span class="crumb-root" onclick="app.backToPlatform()" style="cursor:pointer; color:var(--med-primary, #0284c7); font-weight:600;">پلتفرم</span>
+        <div class="breadcrumb-trail" id="breadcrumbTrail">
+          <span class="crumb-root" onclick="app.backToPlatform()">پلتفرم</span>
           <span class="crumb-separator">/</span>
-          <span class="crumb-module" onclick="app.showScreen('dashboard')" style="cursor:pointer;">ماژول فلش‌کارت</span>
+          <span class="crumb-module" onclick="app.showScreen('dashboard')">ماژول فلش‌کارت</span>
           <span class="crumb-separator">/</span>
-          <span class="crumb-active" id="activeBreadcrumbLeaf" style="font-weight:700; color:var(--text-main, #0f172a);">داشبورد</span>
+          <span class="crumb-active" id="activeBreadcrumbLeaf">داشبورد</span>
         </div>
       </div>
 
@@ -113,17 +113,17 @@
         <div class="platform-hub-view">
           
           <!-- بنر وضعیت تحصیلی دانشجو (Student Academic Status Hero) -->
-          <div class="platform-hero-card glass-card" style="padding:16px; margin-bottom:14px;">
-            <div class="p-hero-top" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div class="platform-hero-card glass-card">
+            <div class="p-hero-top">
               <span class="badge-tag">اکوسیستم جامع آموزش پزشکی MedCardy</span>
-              <span class="p-hero-date" style="font-size:0.75rem; color:var(--text-muted);">آمادگی آزمون پره‌انترنی اسفند</span>
+              <span class="p-hero-date">آمادگی آزمون پره‌انترنی اسفند</span>
             </div>
-            <div class="p-hero-body" style="display:flex; align-items:center; gap:12px;">
-              <div class="p-hero-avatar" style="font-size:2rem; width:48px; height:48px; border-radius:50%; background:rgba(2,132,199,0.12); display:flex; align-items:center; justify-content:center;">🩺</div>
+            <div class="p-hero-body">
+              <div class="p-hero-avatar">🩺</div>
               <div class="p-hero-info">
-                <h3 style="margin:0; font-size:1.05rem; font-weight:800;">دکتر سید - اینترن داخلی • سطح ۴</h3>
-                <p style="margin:3px 0 0; font-size:0.78rem; color:var(--text-muted);">داوطلب آزمون جامع پره‌انترنی | دانشگاه علوم پزشکی تهران</p>
-                <div class="p-hero-badges" style="display:flex; gap:6px; margin-top:8px;">
+                <h3>دکتر سید - اینترن داخلی • سطح ۴</h3>
+                <p>داوطلب آزمون جامع پره‌انترنی | دانشگاه علوم پزشکی تهران</p>
+                <div class="p-hero-badges">
                   <span class="badge-high-yield">۴ دوره بالینی فعال</span>
                   <span class="badge-algo-tag">سیستم ارزیابی FSRS v4</span>
                 </div>
@@ -139,35 +139,35 @@
             </div>
           </div>
 
-          <div class="platform-courses-grid" id="platformCoursesContainer" style="display:flex; flex-direction:column; gap:12px;">
+          <div class="platform-courses-grid" id="platformCoursesContainer">
             <!-- دوره ۱: بیماری‌های قلب و عروق -->
-            <div class="platform-course-card glass-card" data-course-id="cardiology" style="padding:14px;">
-              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
-                  <span class="p-course-icon" style="font-size:1.6rem;">🫀</span>
+            <div class="platform-course-card glass-card" data-course-id="cardiology">
+              <div class="p-course-header">
+                <div class="p-course-title-wrap">
+                  <span class="p-course-icon">🫀</span>
                   <div>
-                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">بیماری‌های قلب و عروق (کاردیولوژی)</h4>
-                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Cardiology • ۳ مجموعه تخصصی • ۱۶۲ کارت</span>
+                    <h4 class="p-course-title">بیماری‌های قلب و عروق (کاردیولوژی)</h4>
+                    <span class="p-course-subtitle">Cardiology • ۳ مجموعه تخصصی • ۱۶۲ کارت</span>
                   </div>
                 </div>
                 <span class="badge-tag">دوره خریداری شده</span>
               </div>
-              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۶۲</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+              <div class="p-course-metrics">
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-primary">۱۶۲</span>
+                  <span class="p-metric-lbl">کل کارت‌ها</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۳۰</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-danger">۳۰</span>
+                  <span class="p-metric-lbl">سررسید مرور</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۸٪</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-success">۷۸٪</span>
+                  <span class="p-metric-lbl">میزان تسلط</span>
                 </div>
               </div>
-              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
-                <div class="p-progress-fill" style="width:78%; height:100%; background-color:#ef4444; border-radius:3px;"></div>
+              <div class="p-course-progress-bar">
+                <div class="p-progress-fill" style="width:78%; background-color:#ef4444;"></div>
               </div>
               <div class="p-course-actions">
                 <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('cardiology')">
@@ -178,33 +178,33 @@
             </div>
 
             <!-- دوره ۲: فارماکولوژی بالینی -->
-            <div class="platform-course-card glass-card" data-course-id="pharmacology" style="padding:14px;">
-              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
-                  <span class="p-course-icon" style="font-size:1.6rem;">💊</span>
+            <div class="platform-course-card glass-card" data-course-id="pharmacology">
+              <div class="p-course-header">
+                <div class="p-course-title-wrap">
+                  <span class="p-course-icon">💊</span>
                   <div>
-                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">فارماکولوژی بالینی و سم‌شناسی (دارو)</h4>
-                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pharmacology • ۳ مجموعه تخصصی • ۲۱۱ کارت</span>
+                    <h4 class="p-course-title">فارماکولوژی بالینی و سم‌شناسی (دارو)</h4>
+                    <span class="p-course-subtitle">Pharmacology • ۳ مجموعه تخصصی • ۲۱۱ کارت</span>
                   </div>
                 </div>
                 <span class="badge-tag">دوره خریداری شده</span>
               </div>
-              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۲۱۱</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+              <div class="p-course-metrics">
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-primary">۲۱۱</span>
+                  <span class="p-metric-lbl">کل کارت‌ها</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۴۳</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-danger">۴۳</span>
+                  <span class="p-metric-lbl">سررسید مرور</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۰٪</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-success">۷۰٪</span>
+                  <span class="p-metric-lbl">میزان تسلط</span>
                 </div>
               </div>
-              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
-                <div class="p-progress-fill" style="width:70%; height:100%; background-color:#06b6d4; border-radius:3px;"></div>
+              <div class="p-course-progress-bar">
+                <div class="p-progress-fill" style="width:70%; background-color:#06b6d4;"></div>
               </div>
               <div class="p-course-actions">
                 <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pharmacology')">
@@ -215,33 +215,33 @@
             </div>
 
             <!-- دوره ۳: بیماری‌های داخلی ریه -->
-            <div class="platform-course-card glass-card" data-course-id="pulmonology" style="padding:14px;">
-              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
-                  <span class="p-course-icon" style="font-size:1.6rem;">🫁</span>
+            <div class="platform-course-card glass-card" data-course-id="pulmonology">
+              <div class="p-course-header">
+                <div class="p-course-title-wrap">
+                  <span class="p-course-icon">🫁</span>
                   <div>
-                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">بیماری‌های داخلی ریه و تنفس (پلمونولوژی)</h4>
-                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pulmonology • ۳ مجموعه تخصصی • ۱۲۸ کارت</span>
+                    <h4 class="p-course-title">بیماری‌های داخلی ریه و تنفس (پلمونولوژی)</h4>
+                    <span class="p-course-subtitle">Pulmonology • ۳ مجموعه تخصصی • ۱۲۸ کارت</span>
                   </div>
                 </div>
                 <span class="badge-tag">دوره خریداری شده</span>
               </div>
-              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۲۸</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+              <div class="p-course-metrics">
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-primary">۱۲۸</span>
+                  <span class="p-metric-lbl">کل کارت‌ها</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۲۳</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-danger">۲۳</span>
+                  <span class="p-metric-lbl">سررسید مرور</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۸۳٪</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-success">۸۳٪</span>
+                  <span class="p-metric-lbl">میزان تسلط</span>
                 </div>
               </div>
-              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
-                <div class="p-progress-fill" style="width:83%; height:100%; background-color:#0284c7; border-radius:3px;"></div>
+              <div class="p-course-progress-bar">
+                <div class="p-progress-fill" style="width:83%; background-color:#0284c7;"></div>
               </div>
               <div class="p-course-actions">
                 <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pulmonology')">
@@ -252,33 +252,33 @@
             </div>
 
             <!-- دوره ۴: کودکان و نوزادان -->
-            <div class="platform-course-card glass-card" data-course-id="pediatrics" style="padding:14px;">
-              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
-                  <span class="p-course-icon" style="font-size:1.6rem;">👶</span>
+            <div class="platform-course-card glass-card" data-course-id="pediatrics">
+              <div class="p-course-header">
+                <div class="p-course-title-wrap">
+                  <span class="p-course-icon">👶</span>
                   <div>
-                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">کودکان، نوزادان و طب اطفال (پدیاتریکس)</h4>
-                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pediatrics • ۳ مجموعه تخصصی • ۱۳۴ کارت</span>
+                    <h4 class="p-course-title">کودکان، نوزادان و طب اطفال (پدیاتریکس)</h4>
+                    <span class="p-course-subtitle">Pediatrics • ۳ مجموعه تخصصی • ۱۳۴ کارت</span>
                   </div>
                 </div>
                 <span class="badge-tag">دوره خریداری شده</span>
               </div>
-              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۳۴</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+              <div class="p-course-metrics">
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-primary">۱۳۴</span>
+                  <span class="p-metric-lbl">کل کارت‌ها</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۲۶</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-danger">۲۶</span>
+                  <span class="p-metric-lbl">سررسید مرور</span>
                 </div>
-                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۶٪</span>
-                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                <div class="p-metric-item">
+                  <span class="p-metric-val text-success">۷۶٪</span>
+                  <span class="p-metric-lbl">میزان تسلط</span>
                 </div>
               </div>
-              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
-                <div class="p-progress-fill" style="width:76%; height:100%; background-color:#ec4899; border-radius:3px;"></div>
+              <div class="p-course-progress-bar">
+                <div class="p-progress-fill" style="width:76%; background-color:#ec4899;"></div>
               </div>
               <div class="p-course-actions">
                 <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pediatrics')">

@@ -14,10 +14,12 @@ const appState = {
   activeSession: null
 };
 
-// تابع کمکی محاسبه درصد تسلط و پیشرفت ایمن (Zero Division Safe)
+// تابع کمکی محاسبه درصد تسلط و پیشرفت ایمن (Zero Division & Non-numeric Safe)
 function calculateProgress(completed, total) {
-  if (!total || total <= 0) return 0;
-  return Math.min(100, Math.max(0, Math.round((completed / total) * 100)));
+  const c = (typeof completed === 'number' && !isNaN(completed) && isFinite(completed) && completed > 0) ? completed : 0;
+  const t = (typeof total === 'number' && !isNaN(total) && isFinite(total) && total > 0) ? total : 0;
+  if (t === 0) return 0;
+  return Math.min(100, Math.max(0, Math.round((c / t) * 100)));
 }
 
 // ساختار داده ۴ دوره خریداری شده دانشجو (4 Purchased Medical Courses Schema)
@@ -519,13 +521,13 @@ const mobileDashboardTemplates = {
               </div>
               
               <!-- سینی دک‌های تخصصی هر دوره (Deck Trays) -->
-              <div class="course-deck-tray" style="display:flex; flex-direction:column; gap:6px;">
+              <div class="course-deck-tray">
                 ${course.decks.map(deck => `
-                  <div class="tray-deck-pill glass-card" onclick="app.startDeckStudy('${course.id}', '${deck.id}')" style="padding:8px 12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; background:rgba(255,255,255,0.75);">
+                  <div class="tray-deck-pill glass-card" onclick="app.startDeckStudy('${course.id}', '${deck.id}')">
                     <div style="display:flex; align-items:center; gap:6px;">
                       <span style="font-size:0.8rem; font-weight:700;">📂 دک ${deck.title}</span>
                     </div>
-                    <span class="badge-tag" style="font-size:0.7rem; font-weight:700;">${deck.due} کارت ←</span>
+                    <span class="badge-tag">${deck.due} کارت ←</span>
                   </div>
                 `).join('')}
               </div>
@@ -640,7 +642,7 @@ const mobileDashboardTemplates = {
         </button>
       </div>
 
-      <div class="shift-wards-grid" style="display:flex; flex-direction:column; gap:12px;">
+      <div class="shift-wards-grid">
         <!-- ایستگاه تریاژ ۱: قلب و کاردیولوژی -->
         <div class="shift-action-btn-card glass-card" onclick="app.startDeckStudy('cardiology', 'cardio-ecg')" style="border-right: 4px solid #ef4444;">
           <div class="icon-box" style="background:#fee2e2; color:#dc2626;">
@@ -710,15 +712,24 @@ const mobileDashboardTemplates = {
  */
 
 const app = {
+  // فراخوانی امن آیکون‌های Lucide با مدیریت خطا (Fail-Soft)
+  safeCreateIcons() {
+    try {
+      if (typeof lucide !== 'undefined' && lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    } catch (_) {
+      // Fail-soft: Icon rendering error must never disrupt app state
+    }
+  },
+
   init() {
     this.renderDashboard();
     this.setupListeners();
     this.updateRecoveryPrescription(appState.recoveryMinutes);
     this.renderCourses();
     this.renderPlatformCourses();
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-      lucide.createIcons();
-    }
+    this.safeCreateIcons();
   },
 
   // بازگشت به پلتفرم اصلی MedCardy
@@ -741,26 +752,32 @@ const app = {
     }
   },
 
-  // ورود به ماژول فلش‌کارت از پلتفرم اصلی
+  // ورود به ماژول فلش‌کارت از پلتفرم اصلی با اعتبارسنجی شناسه دوره
   openCardsModule(courseId = 'all') {
     appState.activeModule = 'flashcards';
-    appState.activeCourseFilter = courseId || 'all';
+    const VALID_COURSES = ['all', 'cardiology', 'pharmacology', 'pulmonology', 'pediatrics'];
+    appState.activeCourseFilter = (typeof courseId === 'string' && VALID_COURSES.includes(courseId)) ? courseId : 'all';
     this.showScreen('dashboard');
   },
 
-  // تعویض چیدمان داشبورد و سراسر پلتفرم
+  // تعویض چیدمان داشبورد و سراسر پلتفرم (با گارد امنیتی در برابر کلیدهای Prototype)
   setLayout(variant) {
-    appState.activeLayout = variant;
-    document.body.setAttribute('data-layout', variant);
+    const VALID_LAYOUTS = ['quizlet', 'duolingo', 'anki', 'shift'];
+    const safeVariant = (typeof variant === 'string' && VALID_LAYOUTS.includes(variant)) ? variant : 'quizlet';
+
+    appState.activeLayout = safeVariant;
+    if (document.body) {
+      document.body.setAttribute('data-layout', safeVariant);
+    }
 
     document.querySelectorAll('#layoutSwitcher .v-pill').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-variant') === variant);
+      btn.classList.toggle('active', btn.getAttribute('data-variant') === safeVariant);
     });
 
     this.renderDashboard();
     this.renderCourses();
     this.updateStudyRoomAccent();
-    this.showToast(`حالت به «${variant}» تغییر یافت`);
+    this.showToast(`حالت به «${safeVariant}» تغییر یافت`);
   },
 
   // شروع مطالعه یک دک با صف کارت‌های داینامیک و مدیریت Session
@@ -768,17 +785,46 @@ const app = {
     let course = null;
     let deck = null;
 
+    const normalize = str => (typeof str === 'string' ? str.toLowerCase().replace(/[\(\)\-_\s]/g, '') : '');
+
+    // ۱. جستجو بر اساس شناسه یا عنوان ارسالی
     if (courseId && !deckId) {
+      const q = String(courseId).trim();
+      const normQ = normalize(q);
+
       for (const c of purchasedCourses) {
-        const match = (c.decks || []).find(d => d.id === courseId || d.title === courseId || (d.title && d.title.includes(courseId)));
+        const match = (c.decks || []).find(d => {
+          if (d.id === q || d.title === q) return true;
+          if (d.title && d.title.includes(q)) return true;
+          const normTitle = normalize(d.title);
+          return normTitle.includes(normQ) || normQ.includes(normTitle);
+        });
         if (match) {
           course = c;
           deck = match;
           break;
         }
       }
+
+      // هدایت هوشمند کلمات کلیدی پزشکی
       if (!course) {
-        course = purchasedCourses.find(c => c.id === courseId);
+        if (/مسموم|سم|پادزهر|antidote/i.test(q)) {
+          course = purchasedCourses.find(c => c.id === 'pharmacology');
+          deck = course ? (course.decks.find(d => d.id === 'pharma-cvs') || course.decks[0]) : null;
+        } else if (/قلب|ecg|آریتمی|cardio/i.test(q)) {
+          course = purchasedCourses.find(c => c.id === 'cardiology');
+          deck = course ? (course.decks.find(d => d.id === 'cardio-ecg') || course.decks[0]) : null;
+        } else if (/ریه|تنفس|abg|icu|copd|آسم/i.test(q)) {
+          course = purchasedCourses.find(c => c.id === 'pulmonology');
+          deck = course ? (course.decks.find(d => d.id === 'pulmo-copd') || course.decks[0]) : null;
+        } else if (/کودک|اطفال|نوزاد|ped|peds/i.test(q)) {
+          course = purchasedCourses.find(c => c.id === 'pediatrics');
+          deck = course ? (course.decks.find(d => d.id === 'peds-er') || course.decks[0]) : null;
+        }
+      }
+
+      if (!course) {
+        course = purchasedCourses.find(c => c.id === q || c.shortTitle === q || (c.title && c.title.includes(q)));
         if (course && course.decks && course.decks.length > 0) {
           deck = course.decks[0];
         }
@@ -788,16 +834,26 @@ const app = {
       if (course) {
         deck = (course.decks || []).find(d => d.id === deckId || d.title === deckId || (d.title && d.title.includes(deckId)));
         if (!deck && course.decks && course.decks.length > 0) {
-          deck = course.decks[0];
+          // نگاشت نام‌های مستعار دک‌ها در چیدمان شیفت
+          if (deckId === 'pharma-antidotes') {
+            deck = course.decks.find(d => d.id === 'pharma-cvs') || course.decks[0];
+          } else if (deckId === 'peds-emergencies') {
+            deck = course.decks.find(d => d.id === 'peds-er') || course.decks[0];
+          } else {
+            deck = course.decks[0];
+          }
         }
       }
     }
 
-    if (!course) course = purchasedCourses[0];
-    if (!deck) deck = (course && course.decks && course.decks.length > 0) ? course.decks[0] : null;
+    if (!course) course = (purchasedCourses && purchasedCourses.length > 0) ? purchasedCourses[0] : { id: 'cardiology', title: 'کاردیولوژی', decks: [] };
+    if (!deck) deck = (course && course.decks && course.decks.length > 0) ? course.decks[0] : { id: 'default-deck', title: 'مرور بالینی', cardsList: [] };
 
-    const cardsQueue = (deck && Array.isArray(deck.cardsList) && deck.cardsList.length > 0)
-      ? [...deck.cardsList]
+    const rawCards = (deck && Array.isArray(deck.cardsList) && deck.cardsList.length > 0) ? deck.cardsList : [];
+    const validCards = rawCards.filter(c => c && typeof c === 'object').map(c => ({ ...c }));
+
+    const cardsQueue = validCards.length > 0
+      ? validCards
       : [
           {
             id: `${deck ? deck.id : 'card'}-1`,
@@ -855,19 +911,30 @@ const app = {
         </div>
       `;
     } else {
-      container.innerHTML = `<span class="badge-tag">کارت ۱ از ۱۲</span>`;
+      const current = (appState.activeSession && typeof appState.activeSession.currentIndex === 'number')
+        ? appState.activeSession.currentIndex + 1
+        : 1;
+      const total = (appState.activeSession && appState.activeSession.queue)
+        ? appState.activeSession.queue.length
+        : 12;
+      container.innerHTML = `<span class="badge-tag">کارت ${this.toPersianDigits(current)} از ${this.toPersianDigits(total)}</span>`;
     }
-    lucide.createIcons();
+    this.safeCreateIcons();
   },
 
-  // تغییر استایل دکمه‌ها
+  // تغییر استایل دکمه‌ها با اعتبارسنجی مقادیر مجاز
   setBtnStyle(btnStyle) {
-    document.body.classList.remove('btn-style-glass', 'btn-style-3d', 'btn-style-outline');
-    document.body.classList.add(btnStyle);
-    appState.activeBtnStyle = btnStyle;
+    const VALID_STYLES = ['btn-style-glass', 'btn-style-3d', 'btn-style-outline'];
+    const safeStyle = (typeof btnStyle === 'string' && VALID_STYLES.includes(btnStyle)) ? btnStyle : 'btn-style-glass';
+
+    if (document.body) {
+      document.body.classList.remove('btn-style-glass', 'btn-style-3d', 'btn-style-outline');
+      document.body.classList.add(safeStyle);
+    }
+    appState.activeBtnStyle = safeStyle;
 
     document.querySelectorAll('#btnStyleSwitcher .style-choice-card').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-btn-style') === btnStyle);
+      btn.classList.toggle('active', btn.getAttribute('data-btn-style') === safeStyle);
     });
 
     this.toggleVariantSheet(false);
@@ -903,9 +970,12 @@ const app = {
 
   // تعویض صفحات اپلیکیشن با نوار ناوبری پایین و نوار بردکرامب
   showScreen(screenId) {
+    const VALID_SCREENS = ['platform-hub', 'dashboard', 'study', 'recovery', 'courses', 'results'];
+    if (!screenId || typeof screenId !== 'string' || !VALID_SCREENS.includes(screenId)) {
+      screenId = 'platform-hub';
+    }
     let target = document.getElementById(`screen-${screenId}`);
     if (!target) {
-      screenId = 'platform-hub';
       target = document.getElementById('screen-platform-hub') || document.getElementById('screen-dashboard');
     }
     appState.activeScreen = screenId;
@@ -952,8 +1022,12 @@ const app = {
     if (screenId === 'study') {
       this.resetCardState();
       this.updateStudyRoomAccent();
-      if (appState.activeSession && appState.activeSession.queue && appState.activeSession.currentIndex >= appState.activeSession.queue.length - 1) {
+      if (!appState.activeSession) {
+        this.startDeckStudy('cardiology', 'cardio-ecg');
+      } else if (appState.activeSession.queue && appState.activeSession.currentIndex >= appState.activeSession.queue.length) {
         appState.activeSession.currentIndex = 0;
+        this.renderCurrentCard();
+      } else {
         this.renderCurrentCard();
       }
     } else if (screenId === 'courses') {
@@ -962,26 +1036,46 @@ const app = {
       this.renderPlatformCourses();
     } else if (screenId === 'results') {
       this.renderResults();
+    } else if (screenId === 'dashboard') {
+      this.renderDashboard();
     }
 
     if (typeof window !== 'undefined' && window.scrollTo) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-      lucide.createIcons();
-    }
+    this.safeCreateIcons();
   },
 
-  // رندر داشبورد
+  // رندر داشبورد با گارد کامل در برابر Prototype Pollution
   renderDashboard() {
     const container = document.getElementById('dashboard-content');
     if (!container) return;
 
-    const templateFn = mobileDashboardTemplates[appState.activeLayout] || mobileDashboardTemplates.quizlet;
-    container.innerHTML = templateFn();
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-      lucide.createIcons();
+    let templateFn = null;
+    const layout = appState.activeLayout;
+    if (
+      typeof mobileDashboardTemplates === 'object' &&
+      mobileDashboardTemplates !== null &&
+      layout &&
+      typeof layout === 'string' &&
+      Object.prototype.hasOwnProperty.call(mobileDashboardTemplates, layout)
+    ) {
+      const candidate = mobileDashboardTemplates[layout];
+      if (typeof candidate === 'function') {
+        templateFn = candidate;
+      }
     }
+
+    if (!templateFn) {
+      templateFn = mobileDashboardTemplates.quizlet;
+    }
+
+    try {
+      container.innerHTML = templateFn();
+    } catch (_) {
+      container.innerHTML = mobileDashboardTemplates.quizlet();
+    }
+    this.safeCreateIcons();
   },
 
   // چرخش کارت فلش‌کارت
@@ -1048,21 +1142,22 @@ const app = {
     if (flashcard) {
       flashcard.classList.remove('flipped');
     }
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-      lucide.createIcons();
-    }
+    this.safeCreateIcons();
   },
 
-  // ثبت پاسخ FSRS و پیشبرد نوبت مطالعه در صف
+  // ثبت پاسخ FSRS و پیشبرد نوبت مطالعه در صف با کنترل خطا
   rateCard(rating) {
-    const numericRating = parseInt(rating, 10) || 3;
-    const labels = { 1: 'دوباره (<1m)', 2: 'سخت (12h)', 3: 'خوب (1d)', 4: 'راحت (4d)' };
-    this.showToast(`پاسخ «${labels[numericRating] || 'خوب'}» در حافظه ثبت شد`);
-
     const session = appState.activeSession;
-    if (!session) {
-      return;
+    if (!session || !Array.isArray(session.queue) || session.queue.length === 0) {
+      return; // بازگشت بی‌صدا بدون ثبت در غیاب جلسه فعال
     }
+
+    const parsed = parseInt(rating, 10);
+    const numericRating = (Number.isFinite(parsed) && parsed >= 1 && parsed <= 4) ? parsed : 3;
+
+    const labels = { 1: 'دوباره (<1m)', 2: 'سخت (12h)', 3: 'خوب (1d)', 4: 'راحت (4d)' };
+    const stabilities = { 1: 0.4, 2: 1.2, 3: 2.5, 4: 4.0 };
+    this.showToast(`پاسخ «${labels[numericRating]}» در حافظه ثبت شد`);
 
     const course = session.courseId ? purchasedCourses.find(c => c.id === session.courseId) : null;
     let deck = null;
@@ -1071,26 +1166,25 @@ const app = {
       deck = course.decks.find(d => d.id === session.deckId) || null;
     }
 
-    if (session.queue && session.queue.length > 0) {
-      const currentCard = session.queue[session.currentIndex];
-      if (currentCard) {
-        currentCard.lastRating = numericRating;
-        currentCard.fsrsReviews = (currentCard.fsrsReviews || 0) + 1;
-        currentCard.stability = numericRating === 1 ? 0.4 : (numericRating === 2 ? 1.2 : (numericRating === 3 ? 2.5 : 4.0));
+    const currentCard = session.queue[session.currentIndex];
+    if (currentCard && typeof currentCard === 'object') {
+      currentCard.lastRating = numericRating;
+      currentCard.fsrsReviews = (currentCard.fsrsReviews || 0) + 1;
+      currentCard.stability = stabilities[numericRating];
 
-        if (deck && Array.isArray(deck.cardsList)) {
-          const srcCard = deck.cardsList.find(c => c.id === currentCard.id);
-          if (srcCard) {
-            srcCard.lastRating = numericRating;
-            srcCard.fsrsReviews = currentCard.fsrsReviews;
-            srcCard.stability = currentCard.stability;
-          }
+      if (deck && Array.isArray(deck.cardsList)) {
+        const srcCard = deck.cardsList.find(c => c && c.id === currentCard.id);
+        if (srcCard && typeof srcCard === 'object') {
+          srcCard.lastRating = numericRating;
+          srcCard.fsrsReviews = currentCard.fsrsReviews;
+          srcCard.stability = currentCard.stability;
         }
       }
-      session.reviewsCount = (session.reviewsCount || 0) + 1;
-      if (numericRating >= 3) {
-        session.correctCount = (session.correctCount || 0) + 1;
-      }
+    }
+
+    session.reviewsCount = (session.reviewsCount || 0) + 1;
+    if (numericRating >= 3) {
+      session.correctCount = (session.correctCount || 0) + 1;
     }
 
     if (deck) {
@@ -1106,20 +1200,13 @@ const app = {
       this.recalculateCourseStats(course.id);
     }
 
-    if (session.queue && session.queue.length > 0) {
-      const currentCard = session.queue[session.currentIndex];
+    if (numericRating === 1 && currentCard && typeof currentCard === 'object') {
+      session.queue.push({ ...currentCard });
+    }
 
-      if (numericRating === 1 && currentCard) {
-        session.queue.push({ ...currentCard });
-      }
-
-      if (session.currentIndex < session.queue.length - 1) {
-        session.currentIndex++;
-        this.renderCurrentCard();
-      } else {
-        this.renderResults();
-        this.showScreen('results');
-      }
+    if (session.currentIndex < session.queue.length - 1) {
+      session.currentIndex++;
+      this.renderCurrentCard();
     } else {
       this.renderResults();
       this.showScreen('results');
@@ -1128,6 +1215,7 @@ const app = {
 
   // موتور ایزوله محاسبه آمار دوره‌ها (تنها دوره مورد نظر به‌روزرسانی می‌شود)
   recalculateCourseStats(courseId) {
+    if (!courseId || typeof courseId !== 'string' || courseId === '__proto__' || courseId === 'constructor') return;
     const course = purchasedCourses.find(c => c.id === courseId);
     if (!course || !Array.isArray(course.decks) || course.decks.length === 0) return;
 
@@ -1174,6 +1262,7 @@ const app = {
     const reviewedEl = document.getElementById('resCardsReviewed') || document.querySelector('#screen-results #resCardsReviewed');
     const accuracyEl = document.getElementById('resAccuracy') || document.querySelector('#screen-results #resAccuracy');
     const timeEl = document.getElementById('resStudyTime') || document.querySelector('#screen-results #resStudyTime');
+    const overdueReductionEl = document.getElementById('resOverdueReduction') || document.querySelector('#screen-results #resOverdueReduction');
 
     const reviews = session.reviewsCount || 0;
     const correct = session.correctCount || 0;
@@ -1184,6 +1273,10 @@ const app = {
     }
     if (accuracyEl) {
       accuracyEl.textContent = `${this.toPersianDigits(accuracy)}٪`;
+    }
+    if (overdueReductionEl) {
+      const reducedCount = reviews > 0 ? correct : 0;
+      overdueReductionEl.textContent = reducedCount > 0 ? `-${this.toPersianDigits(reducedCount)}` : '۰';
     }
     if (timeEl && session.startTime) {
       const elapsedSec = Math.max(0, Math.floor((Date.now() - session.startTime) / 1000));
@@ -1211,33 +1304,33 @@ const app = {
       const subtitleText = `${c.enTitle || ''} • ${this.toPersianDigits(deckCount)} مجموعه تخصصی • ${this.toPersianDigits(totalCards)} کارت`;
 
       return `
-        <div class="platform-course-card glass-card" data-course-id="${c.id}" style="padding:14px;">
-          <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
-            <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
-              <span class="p-course-icon" style="font-size:1.6rem;">${c.icon || '📚'}</span>
+        <div class="platform-course-card glass-card" data-course-id="${c.id}">
+          <div class="p-course-header">
+            <div class="p-course-title-wrap">
+              <span class="p-course-icon">${c.icon || '📚'}</span>
               <div>
-                <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">${displayTitle}</h4>
-                <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">${subtitleText}</span>
+                <h4 class="p-course-title">${displayTitle}</h4>
+                <span class="p-course-subtitle">${subtitleText}</span>
               </div>
             </div>
             <span class="badge-tag">${c.badge || 'دوره خریداری شده'}</span>
           </div>
-          <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
-            <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-              <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">${this.toPersianDigits(totalCards)}</span>
-              <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+          <div class="p-course-metrics">
+            <div class="p-metric-item">
+              <span class="p-metric-val text-primary">${this.toPersianDigits(totalCards)}</span>
+              <span class="p-metric-lbl">کل کارت‌ها</span>
             </div>
-            <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-              <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">${this.toPersianDigits(dueCount)}</span>
-              <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+            <div class="p-metric-item">
+              <span class="p-metric-val text-danger">${this.toPersianDigits(dueCount)}</span>
+              <span class="p-metric-lbl">سررسید مرور</span>
             </div>
-            <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
-              <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">${this.toPersianDigits(progress)}٪</span>
-              <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+            <div class="p-metric-item">
+              <span class="p-metric-val text-success">${this.toPersianDigits(progress)}٪</span>
+              <span class="p-metric-lbl">میزان تسلط</span>
             </div>
           </div>
-          <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
-            <div class="p-progress-fill" style="width:${progress}%; height:100%; background-color:${c.accentColor || '#0284c7'}; border-radius:3px;"></div>
+          <div class="p-course-progress-bar">
+            <div class="p-progress-fill" style="width:${progress}%; background-color:${c.accentColor || '#0284c7'};"></div>
           </div>
           <div class="p-course-actions">
             <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('${c.id}')">
@@ -1249,22 +1342,39 @@ const app = {
       `;
     }).join('');
 
-    if (typeof lucide !== 'undefined' && lucide.createIcons) {
-      lucide.createIcons();
-    }
+    this.safeCreateIcons();
   },
 
-  // راه‌اندازی جلسه مطالعه با کارت‌های دلخواه
+  // راه‌اندازی جلسه مطالعه با کارت‌های دلخواه با پالایش کامل داده‌ها
   startCustomSession(cards = []) {
     if (!cards || !Array.isArray(cards) || cards.length === 0) {
       this.showToast('هیچ کارتی برای مطالعه در صف قرار ندارد.');
       return;
     }
+
+    const sanitizedQueue = cards
+      .filter(c => c && typeof c === 'object')
+      .map((c, i) => ({
+        id: c.id || `custom-${i + 1}`,
+        question: c.question || c.title || 'سؤال بالینی',
+        answer: c.answer || c.pearl || 'پاسخ بالینی',
+        scenario: c.scenario || c.question || 'سناریوی بالینی کیس',
+        diagnosis: c.diagnosis || c.answer || 'تشخیص بالینی',
+        pearl: c.pearl || c.answer || 'نکته مروارید بالینی',
+        badge: c.badge || '⭐ کارت سفارشی',
+        ...c
+      }));
+
+    if (sanitizedQueue.length === 0) {
+      this.showToast('فرمت کارت‌های ارسالی معتبر نیست.');
+      return;
+    }
+
     appState.activeSession = {
       courseId: 'custom',
       deckId: 'custom',
       deckTitle: 'مطالعه سفارشی',
-      queue: [...cards],
+      queue: sanitizedQueue,
       currentIndex: 0,
       reviewsCount: 0,
       correctCount: 0,
@@ -1274,31 +1384,66 @@ const app = {
     this.renderCurrentCard();
   },
 
-  // محاسبه نسخه ریکاوری هوشمند
+  // راه‌اندازی جلسه مطالعه ریکاوری هوشمند با گردآوری کارت‌های بحرانی
+  startRecoverySession(minutes) {
+    const parsed = parseInt(minutes, 10);
+    const min = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : (appState.recoveryMinutes || 15);
+    const cardsCount = Math.round(min * 1.8);
+    let recoveryCards = [];
+    purchasedCourses.forEach(c => {
+      (c.decks || []).forEach(d => {
+        if (Array.isArray(d.cardsList)) {
+          recoveryCards.push(...d.cardsList);
+        }
+      });
+    });
+    if (recoveryCards.length === 0) {
+      this.startDeckStudy('cardiology', 'cardio-ecg');
+      return;
+    }
+    const selected = recoveryCards.slice(0, Math.max(1, cardsCount));
+    appState.activeSession = {
+      courseId: 'recovery',
+      deckId: 'recovery-smart',
+      deckTitle: `ریکاوری هوشمند (${this.toPersianDigits(selected.length)} کارت)`,
+      queue: [...selected],
+      currentIndex: 0,
+      reviewsCount: 0,
+      correctCount: 0,
+      startTime: Date.now()
+    };
+    this.showScreen('study');
+    this.renderCurrentCard();
+  },
+
+  // محاسبه نسخه ریکاوری هوشمند با ایمن‌سازی کامل ورودی زمان
   updateRecoveryPrescription(minutes) {
-    appState.recoveryMinutes = minutes;
+    const parsed = parseInt(minutes, 10);
+    const safeMinutes = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : 15;
+
+    appState.recoveryMinutes = safeMinutes;
     const display = document.getElementById('timeValueDisplay');
     const box = document.getElementById('prescriptionBox');
-    if (display) display.textContent = `${minutes} دقیقه`;
+    if (display) display.textContent = `${safeMinutes} دقیقه`;
 
     if (!box) return;
 
-    const cardsCount = Math.round(minutes * 1.8);
-    const retentionRate = Math.min(95, Math.round(62 + (minutes * 0.72)));
+    const cardsCount = Math.round(safeMinutes * 1.8);
+    const retentionRate = Math.min(95, Math.max(50, Math.round(62 + (safeMinutes * 0.72))));
 
     box.innerHTML = `
       <div class="mobile-prescription">
-        <h4>📋 نسخه پیشنهادی (${minutes} دقیقه):</h4>
+        <h4>📋 نسخه پیشنهادی (${safeMinutes} دقیقه):</h4>
         <p>
           الگوریتم تعداد <strong>${cardsCount} کارت بحرانی</strong> را گزینش کرد. مطالعه این موارد نرخ یادآوری را به <strong>${retentionRate}٪</strong> می‌رساند.
         </p>
-        <button class="glass-btn primary block-btn" onclick="app.showScreen('study')">
+        <button class="glass-btn primary block-btn" onclick="app.startRecoverySession(${safeMinutes})">
           <i data-lucide="play"></i>
           <span>شروع نجات کارت‌ها (${cardsCount} کارت)</span>
         </button>
       </div>
     `;
-    lucide.createIcons();
+    this.safeCreateIcons();
   },
 
   // رندر کامپوننت دروس متناسب با ۴ حالت مختلف
@@ -1441,7 +1586,7 @@ const app = {
         </div>
       `;
     }
-    lucide.createIcons();
+    this.safeCreateIcons();
   },
 
   // پیام اطلاع‌رسانی Toast
@@ -1538,10 +1683,27 @@ const app = {
       });
     }
 
-    // دکمه‌های پاسخ FSRS
+    // دکمه‌های پاسخ FSRS با محافظت از کلیک مکرر و دوگانه (Debounce Guard)
+    let lastRatingTriggerTime = 0;
+    const RATING_DEBOUNCE_MS = 250;
+
     document.querySelectorAll('.thumb-fsrs-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
+        const now = Date.now();
+        if (now - lastRatingTriggerTime < RATING_DEBOUNCE_MS) {
+          return; // نادیده‌گرفتن کلیک مضاعف ناخواسته
+        }
+        lastRatingTriggerTime = now;
+
+        const btnContainer = document.getElementById('fsrsButtons');
+        if (btnContainer) {
+          btnContainer.style.pointerEvents = 'none';
+          setTimeout(() => {
+            if (btnContainer) btnContainer.style.pointerEvents = '';
+          }, RATING_DEBOUNCE_MS);
+        }
+
         this.rateCard(btn.getAttribute('data-rating'));
       });
     });
@@ -1554,20 +1716,49 @@ const app = {
       });
     }
 
-    // کلیدهای میانبر کیبورد
+    // کلیدهای میانبر کیبورد (پشتیبانی از اعداد فارسی، انگلیسی، نام‌پد و محافظت تکرار کلید)
+    const validRateKeys = {
+      '1': 1, '2': 2, '3': 3, '4': 4,
+      '۱': 1, '۲': 2, '۳': 3, '۴': 4,
+      '١': 1, '٢': 2, '٣': 3, '٤': 4,
+      'Numpad1': 1, 'Numpad2': 2, 'Numpad3': 3, 'Numpad4': 4,
+      'Digit1': 1, 'Digit2': 2, 'Digit3': 3, 'Digit4': 4
+    };
+
+    let lastKeyRatingTime = 0;
     window.addEventListener('keydown', (e) => {
+      // چشم‌پوشی در صورت فوکوس روی فیلدهای ورودی متنی
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
+        return;
+      }
+      if (e.repeat) return;
+
       if (appState.activeScreen === 'study') {
-        if (e.code === 'Space') {
+        if (e.code === 'Space' || e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
           this.toggleCardFlip();
-        } else if (['1', '2', '3', '4'].includes(e.key)) {
-          this.rateCard(e.key);
+        } else {
+          const rating = validRateKeys[e.key] || validRateKeys[e.code];
+          if (rating) {
+            e.preventDefault();
+            const now = Date.now();
+            if (now - lastKeyRatingTime < RATING_DEBOUNCE_MS) return;
+            lastKeyRatingTime = now;
+            this.rateCard(rating);
+          }
         }
       }
     });
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  app.init();
-});
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      app.init();
+    });
+  } else {
+    app.init();
+  }
+}
+

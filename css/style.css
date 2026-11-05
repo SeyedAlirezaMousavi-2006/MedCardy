@@ -22,7 +22,7 @@
 
   --text-main: #0f172a;          /* تیره پرکنتراست برای متون پزشکی */
   --text-muted: #475569;         /* خاکستری خوانا */
-  --text-light: #94a3b8;         /* خاکستری ملایم */
+  --text-light: #64748b;         /* خاکستری خوانا با کنتراست ارتقایافته (WCAG AA) */
 
   /* خصوصیات شیشه‌ای موبایل (Mobile Glassmorphism) */
   --glass-bg: rgba(255, 255, 255, 0.78);
@@ -225,8 +225,10 @@ body {
 }
 
 .icon-action-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: rgba(2, 132, 199, 0.08);
   border: 1px solid rgba(2, 132, 199, 0.2);
@@ -265,7 +267,8 @@ body {
   font-family: inherit;
   font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 12px;
+  padding: 8px 14px;
+  min-height: 44px;
   border-radius: var(--radius-pill);
   background: rgba(224, 242, 254, 0.65);
   color: var(--text-muted);
@@ -274,7 +277,7 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: var(--transition-smooth);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   white-space: nowrap;
 }
 
@@ -283,11 +286,42 @@ body {
   height: 14px;
 }
 
+.v-pill:hover:not(.active) {
+  background: rgba(224, 242, 254, 0.95);
+  color: var(--med-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(2, 132, 199, 0.15);
+}
+
+.v-pill:active {
+  transform: scale(0.96);
+}
+
 .v-pill.active {
-  background: var(--med-primary);
+  background: linear-gradient(135deg, var(--med-primary) 0%, #0284c7 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-  border-color: var(--med-primary-light);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* انیمیشن نرم ورود چیدمان‌ها (جلوگیری از پرش صفحه هنگام جابجایی بین ۴ تمپلیت) */
+.layout-quizlet,
+.layout-duolingo,
+.layout-anki,
+.layout-shift {
+  animation: layoutEntrance 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+@keyframes layoutEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ==========================================================================
@@ -340,8 +374,18 @@ body {
   transition: var(--transition-smooth);
 }
 
+.b-nav-item:hover {
+  color: var(--med-primary);
+  transform: translateY(-2px);
+}
+
+.b-nav-item:active {
+  transform: scale(0.92);
+}
+
 .b-nav-item.active {
   color: var(--med-primary);
+  font-weight: 800;
 }
 
 .b-nav-item.active svg {
@@ -405,6 +449,163 @@ body {
   border-radius: var(--radius-lg);
   transition: var(--transition-smooth);
 }
+
+/* ==========================================================================
+   کلاس‌های کمکی رنگ‌های تشخیصی و متون پزشکی
+   ========================================================================== */
+.text-primary { color: var(--med-primary) !important; }
+.text-danger  { color: var(--med-danger) !important; }
+.text-success { color: var(--med-success) !important; }
+.text-warning { color: var(--med-warning) !important; }
+.text-purple  { color: var(--med-purple) !important; }
+
+/* برچسب‌های عمومی سامانه (Medical Badge Tags) */
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--med-primary-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(186, 230, 253, 0.8);
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   حلقه‌های فوکوس دسترس‌پذیر و تعاملات صفحه‌کلید (Focus Visible & Keyboard A11y)
+   ========================================================================== */
+:focus-visible {
+  outline: 2px solid var(--med-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+.v-pill:focus-visible,
+.b-nav-item:focus-visible,
+.thumb-fsrs-btn:focus-visible,
+.style-choice-card:focus-visible,
+.back-to-platform-btn:focus-visible,
+.back-link-btn:focus-visible,
+.tray-deck-pill:focus-visible {
+  outline: 2px solid var(--med-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.25) !important;
+}
+
+/* ==========================================================================
+   نوار مسیر و بازگشت به پلتفرم اصلی (Module Breadcrumbs & Platform Return)
+   ========================================================================== */
+.module-breadcrumb-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(186, 230, 253, 0.85);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.06);
+  transition: var(--transition-smooth);
+}
+
+.back-to-platform-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--med-primary-dark);
+  border: 1px solid rgba(186, 230, 253, 0.9);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  flex-shrink: 0;
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.back-to-platform-btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.back-to-platform-btn:hover {
+  background: #e0f2fe;
+  color: var(--med-primary-dark);
+  border-color: var(--med-primary);
+  transform: translateX(3px); /* حرکت ظریف به سمت راست در راست‌چین */
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.18);
+}
+
+.back-to-platform-btn:hover svg {
+  transform: translateX(2px);
+}
+
+.back-to-platform-btn:active {
+  transform: scale(0.96) translateX(2px);
+}
+
+.breadcrumb-trail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.crumb-root,
+.crumb-module {
+  cursor: pointer;
+  color: var(--med-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 4px 4px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-xs);
+  transition: var(--transition-smooth);
+}
+
+.crumb-root:hover,
+.crumb-module:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--med-primary-dark);
+  text-decoration: underline;
+}
+
+.crumb-separator {
+  color: var(--text-light);
+  user-select: none;
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+
+.crumb-active {
+  font-weight: 800;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
 
 /* ابزارک روزشمار آزمون */
 .exam-countdown-card {
@@ -524,6 +725,24 @@ body {
   font-size: 1.6rem;
   cursor: pointer;
   color: var(--text-muted);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-smooth);
+}
+
+.close-sheet-btn:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--med-primary-dark);
+}
+
+.close-sheet-btn:active {
+  transform: scale(0.92);
 }
 
 .sheet-label {
@@ -675,8 +894,9 @@ body {
 }
 
 .glass-btn.sm {
-  padding: 8px 14px;
+  padding: 10px 16px;
   font-size: 0.8rem;
+  min-height: 44px;
 }
 
 /* ۱. استایل شیشه‌ای کریستال (Crystal Glass) */
@@ -685,6 +905,11 @@ body {
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.7);
+}
+
+.btn-style-glass .glass-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.8);
 }
 
 .btn-style-glass .glass-btn.primary:active {
@@ -697,10 +922,29 @@ body {
   border: 1.5px solid rgba(186, 230, 253, 0.9);
 }
 
+.btn-style-glass .glass-btn.outline:hover {
+  background: rgba(224, 242, 254, 0.5);
+  border-color: var(--med-primary);
+  transform: translateY(-1px);
+}
+
+.btn-style-glass .glass-btn.outline:active {
+  transform: scale(0.97);
+}
+
 .btn-style-glass .glass-btn.danger {
   background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
   color: #fff;
   box-shadow: 0 6px 18px rgba(239, 68, 68, 0.35);
+}
+
+.btn-style-glass .glass-btn.danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(239, 68, 68, 0.45);
+}
+
+.btn-style-glass .glass-btn.danger:active {
+  transform: scale(0.97);
 }
 
 /* ۲. استایل سه‌بعدی گیمین (3D Tactile Duolingo) */
@@ -716,6 +960,11 @@ body {
   box-shadow: 0 4px 0 #0369a1, 0 8px 16px rgba(2, 132, 199, 0.25);
 }
 
+.btn-style-3d .glass-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #0369a1, 0 12px 20px rgba(2, 132, 199, 0.3);
+}
+
 .btn-style-3d .glass-btn.primary:active {
   transform: translateY(3px);
   box-shadow: 0 1px 0 #0369a1;
@@ -728,9 +977,31 @@ body {
   box-shadow: 0 3px 0 #93c5fd;
 }
 
+.btn-style-3d .glass-btn.outline:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 #93c5fd;
+}
+
 .btn-style-3d .glass-btn.outline:active {
   transform: translateY(2px);
   box-shadow: 0 1px 0 #93c5fd;
+}
+
+.btn-style-3d .glass-btn.danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 0 #b91c1c, 0 8px 16px rgba(239, 68, 68, 0.25);
+}
+
+.btn-style-3d .glass-btn.danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #b91c1c, 0 12px 20px rgba(239, 68, 68, 0.3);
+}
+
+.btn-style-3d .glass-btn.danger:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #b91c1c;
 }
 
 /* ۳. استایل خطی مینیمال (Clinical Outline) */
@@ -744,10 +1015,41 @@ body {
   border: 1.5px solid var(--med-primary-dark);
 }
 
+.btn-style-outline .glass-btn.primary:hover {
+  background: var(--med-primary-dark);
+  border-color: var(--med-primary-dark);
+}
+
+.btn-style-outline .glass-btn.primary:active {
+  transform: scale(0.98);
+}
+
 .btn-style-outline .glass-btn.outline {
   background: transparent;
   color: var(--med-primary);
   border: 1.5px solid var(--med-primary);
+}
+
+.btn-style-outline .glass-btn.outline:hover {
+  background: rgba(2, 132, 199, 0.08);
+}
+
+.btn-style-outline .glass-btn.outline:active {
+  transform: scale(0.98);
+}
+
+.btn-style-outline .glass-btn.danger {
+  background: transparent;
+  color: var(--med-danger);
+  border: 1.5px solid var(--med-danger);
+}
+
+.btn-style-outline .glass-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.btn-style-outline .glass-btn.danger:active {
+  transform: scale(0.98);
 }
 
 /* --------------------------------------------------------------------------
@@ -1055,6 +1357,20 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-smooth);
+}
+
+.back-link-btn:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: var(--med-primary);
+}
+
+.back-link-btn:active {
+  transform: scale(0.96);
 }
 
 .current-deck-name {
@@ -1074,9 +1390,10 @@ body {
 .dot-due { color: var(--med-danger); }
 .dot-today { color: var(--med-primary); }
 
-/* صحنه سه‌بعدی کارت */
+/* صحنه سه‌بعدی کارت با شتاب سخت‌افزاری GPU */
 .mobile-card-stage {
   perspective: 1200px;
+  -webkit-perspective: 1200px;
   min-height: 380px;
   margin-bottom: 16px;
 }
@@ -1085,9 +1402,11 @@ body {
   width: 100%;
   min-height: 380px;
   position: relative;
-  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   cursor: pointer;
+  will-change: transform;
 }
 
 .flashcard.flipped {
@@ -1107,15 +1426,25 @@ body {
   justify-content: space-between;
   border-radius: var(--radius-lg);
   box-sizing: border-box;
+  transform: translateZ(0); /* شتاب سخت‌افزاری GPU */
 }
 
 .card-front {
-  transform: rotateY(0deg);
+  transform: rotateY(0deg) translateZ(1px);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .card-back {
-  transform: rotateY(180deg);
-  background: rgba(255, 255, 255, 0.95);
+  transform: rotateY(180deg) translateZ(1px);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
 .card-top-tags {
@@ -1560,6 +1889,7 @@ body {
 @media (min-width: 1024px) {
   .app-wrapper {
     max-width: 1180px;
+    margin: 0 auto;
   }
 
   .bottom-nav-bar {
@@ -1570,14 +1900,52 @@ body {
     padding: 24px 20px;
   }
 
+  /* مهار عرض در صفحات تک‌کارت مطالعه، ریکاوری و کارنامه برای ارگونومی مطالعه پزشکی */
+  .study-mobile-view,
+  .recovery-mobile-view,
+  .results-mobile-card {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
   .layout-quizlet .quick-stats-row {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .mobile-decks-grid-desktop {
+  /* شبکه ۲ ستونه دوره‌های هاب پلتفرم */
+  .platform-courses-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 18px !important;
+  }
+
+  /* شبکه ۲ ستونه ماژول‌های اکوسیستم هاب */
+  .platform-modules-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+  }
+
+  /* شبکه ۲ ستونه کویزلت، آنکی و شیفت در دسکتاپ */
+  .mobile-decks-grid-desktop,
+  .anki-decks-stream,
+  .anki-decks-tree {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+  }
+
+  .shift-wards-grid,
+  .shift-courses-grid,
+  .shift-thumb-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+  }
+
+  .duo-quests-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
 
   .mobile-action-buttons {
@@ -1589,6 +1957,336 @@ body {
     width: auto;
     min-width: 200px;
   }
+}
+
+/* ==========================================================================
+   صفحه هاب اصلی پلتفرم آموزشی مدکاردی (Platform Hub Portal)
+   ========================================================================== */
+.platform-hub-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.platform-hero-card {
+  padding: 18px 20px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 249, 255, 0.8) 100%);
+  border: 1.5px solid rgba(186, 230, 253, 0.9);
+  box-shadow: 0 10px 30px -4px rgba(2, 132, 199, 0.1);
+}
+
+.p-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.p-hero-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.p-hero-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.p-hero-avatar {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(2, 132, 199, 0.12);
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+}
+
+.p-hero-info h3 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.p-hero-info p {
+  margin: 3px 0 0;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.p-hero-badges {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.platform-section-header {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.platform-section-header div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.platform-section-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+/* شبکه دوره‌های پلتفرم */
+.platform-courses-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.platform-course-card {
+  padding: 16px;
+  transition: var(--transition-bounce);
+  border-right: 4px solid var(--med-primary);
+}
+
+.platform-course-card[data-course-id="cardiology"] { border-right-color: #ef4444; }
+.platform-course-card[data-course-id="pharmacology"] { border-right-color: #06b6d4; }
+.platform-course-card[data-course-id="pulmonology"] { border-right-color: #0284c7; }
+.platform-course-card[data-course-id="pediatrics"] { border-right-color: #ec4899; }
+
+.platform-course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-hover);
+  border-color: var(--glass-border-highlight);
+}
+
+.p-course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.p-course-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.p-course-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.p-course-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.p-course-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.p-course-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.p-metric-item {
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.p-metric-val {
+  display: block;
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+
+.p-metric-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.p-course-progress-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.p-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.p-course-actions .glass-btn {
+  width: 100%;
+}
+
+/* ==========================================================================
+   استایل چیدمان‌های ۴گانه داشبورد دروس (4 Dashboard Layout Variants)
+   ========================================================================== */
+/* ۱. کویزلت مدرن: سینی دک‌ها */
+.course-deck-tray {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tray-deck-pill {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  min-height: 44px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.tray-deck-pill:hover {
+  transform: translateX(-4px); /* اسلاید نرم به سمت چپ در RTL */
+  background: rgba(255, 255, 255, 0.98);
+  border-color: var(--med-primary-light);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+}
+
+.tray-deck-pill:active {
+  transform: scale(0.98) translateX(-2px);
+}
+
+/* ۲. دولینگو پالس: بخش ماموریت‌های روزانه */
+.duo-quests-section {
+  margin-top: 18px;
+}
+
+.duo-quests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ۳. آنکی FSRS: استریم و درخت دک‌ها */
+.anki-decks-stream,
+.anki-decks-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ۴. شیفت بالینی اورژانس: گرید بخش‌ها و ایستگاه‌های تریاژ */
+.shift-wards-grid,
+.shift-courses-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ۵. اجزای ارگونومیک مطالعه، دروس و پنل‌های جانبی */
+.study-progress-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.card-core-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.medical-scenario-box {
+  margin-bottom: 12px;
+}
+
+.answer-scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.courses-mobile-view {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.courses-search-bar {
+  border-radius: var(--radius-md);
+}
+
+.courses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choice-icon {
+  font-size: 1.5rem;
+}
+
+.pill-val {
+  font-weight: 700;
+}
+
+.module-text {
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.mobile-decks-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.glass-header {
+  position: sticky;
+  top: 0;
+}
+
+.glass-bottom-bar {
+  position: fixed;
+  bottom: 0;
 }
 
 /* ==========================================================================
@@ -1639,22 +2337,23 @@ body {
 .module-switch-pill {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(186, 230, 253, 0.9);
-  padding: 3px 8px;
+  padding: 6px 12px;
   border-radius: var(--radius-pill);
   font-family: inherit;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: var(--med-primary-dark);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex-shrink: 0;
   white-space: nowrap;
+  min-height: 40px;
   transition: var(--transition-smooth);
 }
 
-@media (max-width: 440px) {
+@media (max-width: 430px) {
   .platform-tag {
     display: none;
   }
@@ -1665,24 +2364,96 @@ body {
     padding: 8px 10px 6px 10px;
   }
   .stat-pill {
-    padding: 3px 6px;
-    font-size: 0.7rem;
+    padding: 4px 8px;
+    font-size: 0.72rem;
   }
   .avatar-circle {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     font-size: 0.95rem;
   }
   .icon-action-btn {
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
   .header-badges {
-    gap: 4px;
+    gap: 6px;
   }
   .module-switch-pill {
-    font-size: 0.68rem;
-    padding: 2px 6px;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    min-height: 40px;
+  }
+  .module-breadcrumb-bar {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+  .back-to-platform-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    min-height: 44px;
+  }
+  .crumb-active {
+    max-width: 120px;
+  }
+  .fsrs-thumb-grid {
+    gap: 6px;
+  }
+  .thumb-fsrs-btn {
+    padding: 8px 4px;
+    min-height: 44px;
+  }
+  .shift-action-btn-card div div {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 375px) {
+  .content-canvas {
+    padding: 12px 8px;
+  }
+  .module-breadcrumb-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .back-to-platform-btn {
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+  }
+  .breadcrumb-trail {
+    justify-content: center;
+    font-size: 0.72rem;
+  }
+  .crumb-active {
+    max-width: 110px;
+  }
+  .v-pill {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+    min-height: 44px;
+  }
+  .fsrs-thumb-grid {
+    gap: 4px;
+  }
+  .thumb-fsrs-btn {
+    padding: 8px 2px;
+    min-height: 44px;
+  }
+  .thumb-fsrs-btn .f-label {
+    font-size: 0.8rem;
+  }
+  .thumb-fsrs-btn .f-time {
+    font-size: 0.65rem;
+  }
+  .p-hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }
 
@@ -1921,3 +2692,42 @@ body {
   font-size: clamp(1.05rem, 4.2vw, 1.25rem);
   line-height: 1.4;
 }
+
+/* ==========================================================================
+   تضمین ممانعت از سرریز متون و شکست کلمات بدون فاصله (Text Wrapping Hardening)
+   ========================================================================== */
+.glass-card,
+.card-face,
+.card-core-content,
+.medical-scenario-box,
+.scenario-text,
+.ecg-caption,
+.pearl-highlight-box,
+.pearl-highlight-box h3,
+.pearl-highlight-box p,
+.danger-contraindication-box,
+.danger-contraindication-box p,
+.p-course-title,
+.p-course-subtitle,
+.current-deck-name,
+.mobile-deck-card,
+.m-deck-title,
+.hero-title,
+.tray-deck-pill,
+.shift-action-btn-card,
+.shift-desc-text,
+.anki-mobile-card,
+.node-title-chip,
+.module-card h4,
+.module-card p,
+.breadcrumb-trail,
+.crumb-active,
+.results-mobile-card,
+.results-subtext,
+.mobile-prescription,
+.mobile-prescription h4,
+.mobile-prescription p {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
