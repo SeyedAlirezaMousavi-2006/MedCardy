@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- استایل‌ها (Mobile-First) -->
-  <link rel="stylesheet" href="css/style.css?v=2.2">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
   
   <!-- کتابخانه آیکون‌های Lucide -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -31,7 +31,7 @@
     <header class="app-header glass-header">
       <!-- نوار پلتفرم جامع مدکاردی (MedCardy Platform Ecosystem Bar) -->
       <div class="ecosystem-top-row">
-        <div class="platform-brand">
+        <div class="platform-brand" onclick="app.backToPlatform()" style="cursor:pointer;" title="بازگشت به پلتفرم اصلی MedCardy">
           <span class="platform-logo">🫀</span>
           <span class="platform-name">Med<strong>Cardy</strong></span>
           <span class="platform-tag">اکوسیستم پزشکی</span>
@@ -92,6 +92,251 @@
 
     <!-- کانتینر اصلی محتوا (Mobile Content Canvas) -->
     <main class="content-canvas">
+
+      <!-- نوار موقعیت و بازگشت به پلتفرم اصلی (Module Breadcrumbs & Platform Return) -->
+      <div class="module-breadcrumb-bar glass-card" id="moduleBreadcrumbs" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; margin-bottom:12px; gap:8px;">
+        <button class="back-to-platform-btn" id="btnBackToPlatform" onclick="app.backToPlatform()" title="بازگشت به پلتفرم اصلی">
+          <i data-lucide="arrow-right"></i>
+          <span>بازگشت به پلتفرم اصلی</span>
+        </button>
+        <div class="breadcrumb-trail" id="breadcrumbTrail" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-muted, #64748b);">
+          <span class="crumb-root" onclick="app.backToPlatform()" style="cursor:pointer; color:var(--med-primary, #0284c7); font-weight:600;">پلتفرم</span>
+          <span class="crumb-separator">/</span>
+          <span class="crumb-module" onclick="app.showScreen('dashboard')" style="cursor:pointer;">ماژول فلش‌کارت</span>
+          <span class="crumb-separator">/</span>
+          <span class="crumb-active" id="activeBreadcrumbLeaf" style="font-weight:700; color:var(--text-main, #0f172a);">داشبورد</span>
+        </div>
+      </div>
+
+      <!-- ۰. صفحه هاب اصلی پلتفرم مدکاردی (Platform Hub Portal) -->
+      <section id="screen-platform-hub" class="screen-view">
+        <div class="platform-hub-view">
+          
+          <!-- بنر وضعیت تحصیلی دانشجو (Student Academic Status Hero) -->
+          <div class="platform-hero-card glass-card" style="padding:16px; margin-bottom:14px;">
+            <div class="p-hero-top" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span class="badge-tag">اکوسیستم جامع آموزش پزشکی MedCardy</span>
+              <span class="p-hero-date" style="font-size:0.75rem; color:var(--text-muted);">آمادگی آزمون پره‌انترنی اسفند</span>
+            </div>
+            <div class="p-hero-body" style="display:flex; align-items:center; gap:12px;">
+              <div class="p-hero-avatar" style="font-size:2rem; width:48px; height:48px; border-radius:50%; background:rgba(2,132,199,0.12); display:flex; align-items:center; justify-content:center;">🩺</div>
+              <div class="p-hero-info">
+                <h3 style="margin:0; font-size:1.05rem; font-weight:800;">دکتر سید - اینترن داخلی • سطح ۴</h3>
+                <p style="margin:3px 0 0; font-size:0.78rem; color:var(--text-muted);">داوطلب آزمون جامع پره‌انترنی | دانشگاه علوم پزشکی تهران</p>
+                <div class="p-hero-badges" style="display:flex; gap:6px; margin-top:8px;">
+                  <span class="badge-high-yield">۴ دوره بالینی فعال</span>
+                  <span class="badge-algo-tag">سیستم ارزیابی FSRS v4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- بخش ۴ دوره تخصصی خریداری شده دانشجو (Purchased Courses Grid) -->
+          <div class="platform-section-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 10px;">
+              <h3 style="margin:0; font-size:1.05rem; font-weight:800;">دوره‌های تخصصی خریداری‌شده</h3>
+              <span style="font-size:0.75rem; color:var(--text-muted);">۴ دوره بالینی فعال</span>
+            </div>
+          </div>
+
+          <div class="platform-courses-grid" id="platformCoursesContainer" style="display:flex; flex-direction:column; gap:12px;">
+            <!-- دوره ۱: بیماری‌های قلب و عروق -->
+            <div class="platform-course-card glass-card" data-course-id="cardiology" style="padding:14px;">
+              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
+                  <span class="p-course-icon" style="font-size:1.6rem;">🫀</span>
+                  <div>
+                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">بیماری‌های قلب و عروق (کاردیولوژی)</h4>
+                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Cardiology • ۳ مجموعه تخصصی • ۱۶۲ کارت</span>
+                  </div>
+                </div>
+                <span class="badge-tag">دوره خریداری شده</span>
+              </div>
+              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۶۲</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۳۰</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۸٪</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                </div>
+              </div>
+              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
+                <div class="p-progress-fill" style="width:78%; height:100%; background-color:#ef4444; border-radius:3px;"></div>
+              </div>
+              <div class="p-course-actions">
+                <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('cardiology')">
+                  <i data-lucide="play-circle"></i>
+                  <span>ورود به ماژول / مطالعه دوره</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- دوره ۲: فارماکولوژی بالینی -->
+            <div class="platform-course-card glass-card" data-course-id="pharmacology" style="padding:14px;">
+              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
+                  <span class="p-course-icon" style="font-size:1.6rem;">💊</span>
+                  <div>
+                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">فارماکولوژی بالینی و سم‌شناسی (دارو)</h4>
+                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pharmacology • ۳ مجموعه تخصصی • ۲۱۱ کارت</span>
+                  </div>
+                </div>
+                <span class="badge-tag">دوره خریداری شده</span>
+              </div>
+              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۲۱۱</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۴۳</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۰٪</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                </div>
+              </div>
+              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
+                <div class="p-progress-fill" style="width:70%; height:100%; background-color:#06b6d4; border-radius:3px;"></div>
+              </div>
+              <div class="p-course-actions">
+                <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pharmacology')">
+                  <i data-lucide="play-circle"></i>
+                  <span>ورود به ماژول / مطالعه دوره</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- دوره ۳: بیماری‌های داخلی ریه -->
+            <div class="platform-course-card glass-card" data-course-id="pulmonology" style="padding:14px;">
+              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
+                  <span class="p-course-icon" style="font-size:1.6rem;">🫁</span>
+                  <div>
+                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">بیماری‌های داخلی ریه و تنفس (پلمونولوژی)</h4>
+                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pulmonology • ۳ مجموعه تخصصی • ۱۲۸ کارت</span>
+                  </div>
+                </div>
+                <span class="badge-tag">دوره خریداری شده</span>
+              </div>
+              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۲۸</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۲۳</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۸۳٪</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                </div>
+              </div>
+              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
+                <div class="p-progress-fill" style="width:83%; height:100%; background-color:#0284c7; border-radius:3px;"></div>
+              </div>
+              <div class="p-course-actions">
+                <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pulmonology')">
+                  <i data-lucide="play-circle"></i>
+                  <span>ورود به ماژول / مطالعه دوره</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- دوره ۴: کودکان و نوزادان -->
+            <div class="platform-course-card glass-card" data-course-id="pediatrics" style="padding:14px;">
+              <div class="p-course-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div class="p-course-title-wrap" style="display:flex; align-items:center; gap:10px;">
+                  <span class="p-course-icon" style="font-size:1.6rem;">👶</span>
+                  <div>
+                    <h4 class="p-course-title" style="margin:0; font-size:0.95rem; font-weight:800;">کودکان، نوزادان و طب اطفال (پدیاتریکس)</h4>
+                    <span class="p-course-subtitle" style="font-size:0.75rem; color:var(--text-muted);">Pediatrics • ۳ مجموعه تخصصی • ۱۳۴ کارت</span>
+                  </div>
+                </div>
+                <span class="badge-tag">دوره خریداری شده</span>
+              </div>
+              <div class="p-course-metrics" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; text-align:center;">
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-primary" style="display:block; font-weight:800; font-size:0.95rem;">۱۳۴</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">کل کارت‌ها</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-danger" style="display:block; font-weight:800; font-size:0.95rem;">۲۶</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">سررسید مرور</span>
+                </div>
+                <div class="p-metric-item" style="background:rgba(255,255,255,0.4); padding:6px; border-radius:8px;">
+                  <span class="p-metric-val text-success" style="display:block; font-weight:800; font-size:0.95rem;">۷۶٪</span>
+                  <span class="p-metric-lbl" style="font-size:0.7rem; color:var(--text-muted);">میزان تسلط</span>
+                </div>
+              </div>
+              <div class="p-course-progress-bar" style="height:6px; background:rgba(0,0,0,0.06); border-radius:3px; overflow:hidden; margin-bottom:10px;">
+                <div class="p-progress-fill" style="width:76%; height:100%; background-color:#ec4899; border-radius:3px;"></div>
+              </div>
+              <div class="p-course-actions">
+                <button class="glass-btn primary block-btn sm" onclick="app.openCardsModule('pediatrics')">
+                  <i data-lucide="play-circle"></i>
+                  <span>ورود به ماژول / مطالعه دوره</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- بخش ماژول‌های اکوسیستم پلتفرم مدکاردی (Platform Ecosystem Modules) -->
+          <div class="platform-section-header" style="margin-top:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <h3 style="margin:0; font-size:1.05rem; font-weight:800;">ماژول‌های اکوسیستم آموزشی پلتفرم</h3>
+              <span style="font-size:0.75rem; color:var(--text-muted);">ابزارهای بالینی</span>
+            </div>
+          </div>
+
+          <div class="platform-modules-grid">
+            <div class="module-card active" onclick="app.openCardsModule()">
+              <div class="mod-icon">🫀</div>
+              <div class="mod-info">
+                <h4>فلش‌کارت و مرور هوشمند (Cards FSRS)</h4>
+                <p>مجموعه ۴ دوره تخصصی با متدولوژی فاصله‌گذاری علمی و لایتنر بالینی</p>
+              </div>
+              <span class="active-mod-badge">ماژول فعال</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول بانک سؤالات (Q-Bank) به زودی در پلتفرم فعال می‌شود')">
+              <div class="mod-icon">📝</div>
+              <div class="mod-info">
+                <h4>بانک سؤالات و آزمون‌ها (Q-Bank)</h4>
+                <p>بانک تست پره‌انترنی و ارتقای دستیاری با تحلیل نقاط قوت و ضعف</p>
+              </div>
+              <span class="badge-tag">به زودی</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول اطلس بالینی به زودی فعال می‌شود')">
+              <div class="mod-icon">🔬</div>
+              <div class="mod-info">
+                <h4>اطلس بالینی و تصاویر تشخیصی (Atlas)</h4>
+                <p>آرشیو گرافی، سی‌تی‌اسکن و کیس‌های راند بالینی بیمارستانی</p>
+              </div>
+              <span class="badge-tag">به زودی</span>
+            </div>
+
+            <div class="module-card" onclick="app.showToast('ماژول محاسبه‌گر به زودی فعال می‌شود')">
+              <div class="mod-icon">🧮</div>
+              <div class="mod-info">
+                <h4>محاسبه‌گرهای پزشکی اورژانس (Calculators)</h4>
+                <p>ابزارهای بالینی GFR، اصلاح سدیم، CHADS-VASc و دوزاژ دارویی</p>
+              </div>
+              <span class="badge-tag">به زودی</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       <!-- ۱. صفحه داشبورد اصلی (۴ مدل چیدمان) -->
       <section id="screen-dashboard" class="screen-view active">
@@ -291,19 +536,19 @@
 
           <div class="mobile-stat-tiles">
             <div class="tile-stat glass-card">
-              <span class="tile-num text-primary">۳۲</span>
+              <span class="tile-num text-primary" id="resCardsReviewed">۳۲</span>
               <span class="tile-lbl">کارت مرور شده</span>
             </div>
             <div class="tile-stat glass-card">
-              <span class="tile-num text-success">۹۱٪</span>
+              <span class="tile-num text-success" id="resAccuracy">۹۱٪</span>
               <span class="tile-lbl">پاسخ صحیح</span>
             </div>
             <div class="tile-stat glass-card">
-              <span class="tile-num text-warning">۱۴:۲۰</span>
+              <span class="tile-num text-warning" id="resStudyTime">۱۴:۲۰</span>
               <span class="tile-lbl">زمان مطالعه (د)</span>
             </div>
             <div class="tile-stat glass-card">
-              <span class="tile-num text-danger">-۱۸</span>
+              <span class="tile-num text-danger" id="resOverdueReduction">-۱۸</span>
               <span class="tile-lbl">کاهش عقب‌افتادگی</span>
             </div>
           </div>
@@ -313,7 +558,7 @@
               <i data-lucide="home"></i>
               <span>بازگشت به خانه</span>
             </button>
-            <button class="glass-btn outline lg block-btn" onclick="app.showScreen('study')">
+            <button class="glass-btn outline lg block-btn" onclick="app.restartCurrentSession()">
               <i data-lucide="rotate-cw"></i>
               <span>یک دور مرور دیگر (۱۰ کارت)</span>
             </button>
@@ -454,6 +699,6 @@
   </div>
 
   <!-- اسکریپت اصلی پروژه -->
-  <script src="js/app.js?v=2.2"></script>
+  <script src="js/app.js?v=3.0"></script>
 </body>
 </html>
