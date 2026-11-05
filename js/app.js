@@ -1024,8 +1024,9 @@ const app = {
       this.updateStudyRoomAccent();
       if (!appState.activeSession) {
         this.startDeckStudy('cardiology', 'cardio-ecg');
-      } else if (appState.activeSession.queue && appState.activeSession.currentIndex >= appState.activeSession.queue.length) {
+      } else if (appState.activeSession.isCompleted || (appState.activeSession.queue && appState.activeSession.currentIndex >= appState.activeSession.queue.length)) {
         appState.activeSession.currentIndex = 0;
+        appState.activeSession.isCompleted = false;
         this.renderCurrentCard();
       } else {
         this.renderCurrentCard();
@@ -1152,7 +1153,7 @@ const app = {
       return; // بازگشت بی‌صدا بدون ثبت در غیاب جلسه فعال
     }
 
-    const parsed = parseInt(rating, 10);
+    const parsed = (typeof rating === 'number' || typeof rating === 'string') ? parseInt(rating, 10) : NaN;
     const numericRating = (Number.isFinite(parsed) && parsed >= 1 && parsed <= 4) ? parsed : 3;
 
     const labels = { 1: 'دوباره (<1m)', 2: 'سخت (12h)', 3: 'خوب (1d)', 4: 'راحت (4d)' };
@@ -1169,7 +1170,20 @@ const app = {
     const currentCard = session.queue[session.currentIndex];
     if (currentCard && typeof currentCard === 'object') {
       currentCard.lastRating = numericRating;
-      currentCard.fsrsReviews = (currentCard.fsrsReviews || 0) + 1;
+
+      let baseReviews = 0;
+      if (deck && Array.isArray(deck.cardsList)) {
+        const srcCard = deck.cardsList.find(c => c && c.id === currentCard.id);
+        if (srcCard && typeof srcCard === 'object' && typeof srcCard.fsrsReviews === 'number') {
+          baseReviews = srcCard.fsrsReviews;
+        } else if (typeof currentCard.fsrsReviews === 'number') {
+          baseReviews = currentCard.fsrsReviews;
+        }
+      } else if (typeof currentCard.fsrsReviews === 'number') {
+        baseReviews = currentCard.fsrsReviews;
+      }
+
+      currentCard.fsrsReviews = baseReviews + 1;
       currentCard.stability = stabilities[numericRating];
 
       if (deck && Array.isArray(deck.cardsList)) {
@@ -1208,6 +1222,7 @@ const app = {
       session.currentIndex++;
       this.renderCurrentCard();
     } else {
+      session.isCompleted = true;
       this.renderResults();
       this.showScreen('results');
     }
@@ -1386,8 +1401,13 @@ const app = {
 
   // راه‌اندازی جلسه مطالعه ریکاوری هوشمند با گردآوری کارت‌های بحرانی
   startRecoverySession(minutes) {
-    const parsed = parseInt(minutes, 10);
-    const min = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : (appState.recoveryMinutes || 15);
+    let min = appState.recoveryMinutes || 15;
+    if (typeof minutes === 'number' && !isNaN(minutes)) {
+      min = Math.max(5, Math.min(60, Math.trunc(minutes)));
+    } else if (typeof minutes === 'string') {
+      const parsed = parseInt(minutes, 10);
+      min = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : (appState.recoveryMinutes || 15);
+    }
     const cardsCount = Math.round(min * 1.8);
     let recoveryCards = [];
     purchasedCourses.forEach(c => {
@@ -1418,8 +1438,13 @@ const app = {
 
   // محاسبه نسخه ریکاوری هوشمند با ایمن‌سازی کامل ورودی زمان
   updateRecoveryPrescription(minutes) {
-    const parsed = parseInt(minutes, 10);
-    const safeMinutes = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : 15;
+    let safeMinutes = 15;
+    if (typeof minutes === 'number' && !isNaN(minutes)) {
+      safeMinutes = Math.max(5, Math.min(60, Math.trunc(minutes)));
+    } else if (typeof minutes === 'string') {
+      const parsed = parseInt(minutes, 10);
+      safeMinutes = Number.isFinite(parsed) ? Math.max(5, Math.min(60, parsed)) : 15;
+    }
 
     appState.recoveryMinutes = safeMinutes;
     const display = document.getElementById('timeValueDisplay');
