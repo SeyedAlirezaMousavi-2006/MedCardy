@@ -32,22 +32,37 @@
 
 ```text
 MedCardy/
-├── frontend/                     # تمامی فایل‌ها و منابع فرانت‌اند پلتفرم
-│   ├── index.html                # صفحه اصلی اپلیکیشن
-│   ├── css/
-│   │   └── style.css             # استایل‌های ریسپانسیو و گلس‌مورفیسم
-│   ├── js/
-│   │   └── app.js                # منطق برنامه، state machine و الگوریتم FSRS
-│   ├── assets/                   # دارایی‌های گرافیکی و آیکون‌ها
-│   └── tests/                    # آزمون‌های خودکار ۵ لایه و پروب‌های E2E
+├── frontend/                     # پروژه جدید Next.js (App Router + TypeScript + Tailwind CSS)
+│   ├── src/
+│   │   └── app/                  # صفحات و Layout اصلی Next.js
+│   ├── public/                   # دارایی‌های استاتیک
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── next.config.ts
+├── test-frontend/                # پروتوتایپ کامل قبلی (Vanilla HTML/CSS/JS + مجموعه تست‌ها)
+│   ├── index.html                # صفحه رابط کاربری پروتوتایپ
+│   ├── css/                      # استایل‌های ریسپانسیو و گلس‌مورفیسم
+│   ├── js/                       # منطق برنامه و موتور FSRS v4
+│   ├── assets/
+│   └── tests/                    # ۱۸ فایل تست خودکار (۱۸۲ تست کامل)
 ├── README.md
 └── .gitignore
 ```
 
 ## 🚀 نحوه مشاهده و اجرا
 
-### مشاهده آفلاین در سیستم خودت:
-کافیست فایل [frontend/index.html](frontend/index.html) را در هر مرورگری (Chrome, Edge, Firefox) با دو بار کلیک باز کنید.
+### ۱. اجرای پروژه Next.js (فرانت‌اند جدید):
+```bash
+cd frontend
+npm run dev
+```
+سپس مرورگر را باز کرده و به آدرس `http://localhost:3000` بروید.
+
+### ۲. مشاهده پروتوتایپ قبلی (Test Frontend):
+کافیست فایل [test-frontend/index.html](test-frontend/index.html) را مستقیماً در هر مرورگری باز کنید یا تست‌های آن را با دستور زیر اجرا کنید:
+```bash
+node test-frontend/tests/test-suite.js
+```
 
 ### آپلود روی اکانت گیت‌هاب و فعال‌سازی آنلاین (GitHub Pages):
 1. در گیت‌هاب یک ریپوزیتوری جدید با نام `MedCardy` بسازید.
